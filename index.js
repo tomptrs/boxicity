@@ -7,6 +7,8 @@ app.get('/', (req,res)=> {
   res.sendFile('index.html');
 })
 
+
+
 app.get('/ar', (req,res)=> {
   res.sendFile('index.html');
 })
