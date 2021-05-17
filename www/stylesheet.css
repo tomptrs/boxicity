@@ -157,7 +157,6 @@ h3{
     font-weight: 400;
     font-style: normal;
     text-align: left;
-    margin-left: 200px;
 }
 
 .logo{
@@ -327,13 +326,16 @@ img {vertical-align: middle;}
 
 
 /*beginn slider*/
-
+.teamslide {
+  position: relative;
+}
 
 #slidewrapper {
-	position: relative;
+	position: absolute;
+  left: 200px;
 	height: 483px;
-    width: 1074px;
-    margin: auto;
+  width: 1074px;
+  margin: auto;
 
 }
 
