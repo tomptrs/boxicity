@@ -10,7 +10,7 @@ body{
     flex-direction: row;
     flex-wrap: wrap;
     margin: auto;
-    
+
 }
 
 ul {
@@ -20,10 +20,8 @@ ul {
 			flex-wrap: wrap;
 			justify-content: right;
             list-style: none;
-            
+
 		}
-
-
 
 ul.a{
             margin-left: 20px;
@@ -31,7 +29,7 @@ ul.a{
             display: block;
             justify-content: flex-start;
             list-style: circle;
-    
+
 }
 
 ul.g{
@@ -54,21 +52,21 @@ details{
     display: grid;
     grid-template-columns: auto auto;
     text-align: left;
-    
+
   }
 
   .grid-item {
-    
+
     row-gap: 50px;
     column-gap: 100px;
   }
 
 #nav{
-           /* text-align: right;*/
-            width: 100%;
-            height: 100px;
-        
-        }
+    text-align: right;
+    width: 100%;
+    height: 100px;
+}
+
 nav{
     background-color: #f1d6e5;
 }
@@ -78,26 +76,26 @@ nav{
     align-content: center;
 }
 
-a {         
+a {
             font-family: proxima-nova, sans-serif;
             font-weight: 400;
             font-style: normal;
 			display: inline-block;
-			padding: 1em 0.4em;
+			padding: 2em 0.4em;
 			width: 140px;
 			text-align: center;
             vertical-align: middle;
 			color: grey;
 			text-decoration: none;
             font-size:20px;
-           
+
 		}
 b {
             font-family: proxima-nova, sans-serif;
             font-weight: 400;
             font-style: normal;
 			display: inline;
-			padding: 1em 0.4em;
+			padding: 2em 0.4em;
 			width: 140px;
 			text-align: center;
             vertical-align: middle;
@@ -107,21 +105,20 @@ b {
 }
 
 .horiz{
-    display: inline;
+  display: inline;
 }
 a.border{
-border: none;
+  border: none;
 }
 
 a.aktiv{
-   
-    font-weight: bold;
-   
+  font-weight: bold;
+
 }
-		
+
 a:hover {
 			background:#8caef4;
-    
+
 		}
 
 p{
@@ -131,9 +128,9 @@ p{
     text-align: left;
     font-size: 1em;
     line-height: 1.5em;
-    
+
 }
-		
+
 h1{
     font-family: gill-sans-nova-inline, sans-serif;
     font-weight: 400;
@@ -142,7 +139,7 @@ h1{
     text-align: left;
     color: grey;
     padding-top: 20px;
-    margin-left: 200px;; 
+    margin-left: 200px;;
 }
 
 h2{
@@ -164,8 +161,8 @@ h3{
 }
 
 .logo{
-    
-    text-align: left;
+    width: auto;
+    margin-right: 800px;
 }
 
 .pics{
@@ -183,13 +180,13 @@ h3{
     justify-content: left;
 }
 
-#pics{     
+#pics{
     margin-top: 70px;
     text-align: center;
     width:100%;
 }
 
-.item3{        
+.item3{
     border: none;
     margin-left: 200px;
     margin-right: 200px;
@@ -217,7 +214,7 @@ h3{
     width: 1000px;
     justify-content: center;
 }
-.text_left{                                                                      
+.text_left{
     width: 1000px;
     border: none;
     margin-left: 20px;
@@ -247,7 +244,7 @@ h3{
     margin-left: 30px;
 }
 
-.teamslide{     
+.teamslide{
     height: 630px;
     width:100%;
     justify-content: center;
@@ -255,7 +252,7 @@ h3{
 }
 
 
-.icons{                                                                     
+.icons{
     width: 250px;
    /* margin-left: 650px;*/
     text-align: center;
@@ -268,7 +265,7 @@ h3{
     height: 300px;
     margin-top: 30px;
 
-	
+
 }
 
 /*dropdown style begin*/
@@ -279,9 +276,9 @@ h3{
 
 
 .dropdown .dropbtn {
-   
+
  display: block;
-padding: 1em 0.4em;
+padding: 2em 0.4em;
 width: 140px;
 text-align: center;
 color: grey;
@@ -336,14 +333,14 @@ img {vertical-align: middle;}
 	height: 483px;
     width: 1074px;
     margin: auto;
-    
+
 }
 
 .slideshow > * {
 	background: #ccc;
 	height: 100%;
 	text-align: center;
-   
+
 }
 
 .handleBtn {
@@ -515,14 +512,14 @@ img {vertical-align: middle;}
 /*Project page*/
 
 .box{
-    float: left; 
-    margin-right: 80px; 
+    float: left;
+    margin-right: 80px;
     margin-bottom: 50px;
 
 }
 
 .border{
-    border: 1px solid; 
+    border: 1px solid;
     border-color:  #0072ce;
     padding-right: 30px;
     padding-top: 30px;
