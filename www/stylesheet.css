@@ -90,6 +90,13 @@ a {
             font-size:20px;
 
 		}
+
+li {
+  font-family: proxima-nova, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 b {
             font-family: proxima-nova, sans-serif;
             font-weight: 400;
@@ -139,7 +146,7 @@ h1{
     text-align: left;
     color: grey;
     padding-top: 20px;
-    margin-left: 200px;;
+    margin-left: 200px;
 }
 
 h2{
@@ -533,4 +540,35 @@ img {vertical-align: middle;}
     padding-right: 30px;
     padding-top: 30px;
     padding-bottom: 30px;
+}
+
+/*Introduction game page*/
+#introductieDoel {
+  margin: 50px 0;
+  width: 1000px;
+}
+#brilLink {
+  width: auto;
+  padding: 0 0;
+  font-size: 0.8em;
+}
+
+ul g li {
+  margin: 3px 0 3px 25px;
+  list-style-type: circle;
+}
+
+#play {
+  position: relative;
+  right: 300px;
+}
+#play2 {
+  position: relative;
+  right: 200px;
+}
+
+.opdrachten {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  margin: 150px 0;
 }
