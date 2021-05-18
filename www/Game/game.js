@@ -1,21 +1,18 @@
-import {Bal} from './models/Bal.js'
-import {Vak} from "./models/Vak.js"
-import {cards as stayhere} from "./services/stayhereService.js"
+/*import {cards as stayhere} from "./services/stayhereService.js"
 import {cards as reflection} from "./services/reflectionService.js"
-import {cards as information} from "./services/informationService.js"
+import {cards as information} from "./services/informationService.js"*/
+
+import { Player } from "./classes/Player.js";
 
 
-function gooi(){
+
+
+
+/*function gooi(){
     alert()
-}
+}*/
 
-document.addEventListener("DOMContentLoaded",(event)=>{
-    let canvas = document.querySelector("canvas")
-    let context = canvas.getContext("2d")
-    const btnGooi = document.querySelector(".btnGooi")
-    const infoSection = document.querySelector(".info")
-    let aanBeurt = 0; // pion 0 is eerst aan beurt
-    infoSection.innerHTML = ("player " + (aanBeurt+1) + " is aan de beurt") //send info
+/*document.addEventListener("DOMContentLoaded",(event)=>{
    const cardMessage = document.querySelector("#myModal")
     
    //initialize card counters
@@ -31,7 +28,7 @@ document.addEventListener("DOMContentLoaded",(event)=>{
 
 
     //Wat er gedaan moet worden na een dobbelsteen gooi
-    if(btnGooi != "undefined"){
+    /*if(btnGooi != "undefined"){
         btnGooi.addEventListener("click",(arg)=>{
             
             let aantal = Math.round(Math.random()*2)+1  //gooi dobbelsteen
@@ -87,7 +84,7 @@ document.addEventListener("DOMContentLoaded",(event)=>{
             if(aanBeurt >= pionnen.length)
                 aanBeurt = 0
             
-            //TODO: Toon een opdracht aan de speler
+            //TOD: Toon een opdracht aan de speler
 
             
             infoSection.innerHTML = ("player " + (aanBeurt+1) + " is aan de beurt, staat nu op positie " + pionnen[aanBeurt].positie)
@@ -178,4 +175,87 @@ function CreatePionnen(){
     pionnen.push(pion3)
 }
 
+})*/
+
+export var playerAmount = 5;
+var players = []
+
+/* Once DOM is loaded, start the boardgame */
+document.addEventListener("DOMContentLoaded",(event)=>{
+    //TODO load functions
+    window.DisplayNicknameInputModal = DisplayNicknameInputModal;
+    window.SetPlayerAmount = SetPlayerAmount;
+    window.AddPlayers = AddPlayers;
+
+    //TODO ask for playercount and nicknames
+    DisplayPlayerCountInputModal();
+
+    //TODO display pawns and statuses
+    DisplayPlayerStatuses(playerAmount);
 })
+
+
+
+/* This returns the integer of the height of the document */
+function GetDocumentHeight(){
+    var body = document.body;
+    var html = document.documentElement;
+
+    var height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+    return Math.round(height);
+}
+
+/* This generates a new player status for the right side of the screen */
+function GetNewStatusDiv(height){
+    return '<div class="player_status" style="height: ' + height + 'px;"></div>';
+}
+
+
+/* This displays and adjusts the height of the player statuses according to how many players are present */
+function DisplayPlayerStatuses(playerAmount){
+    var status_height = (GetDocumentHeight() - 50) / playerAmount;
+
+    for (var i = 0; i < playerAmount; i++){
+        $('.status_container').append(GetNewStatusDiv(status_height));
+    }
+}
+
+function GetNewNicknameInput(playerIndex){
+    return `<label for="nickname${playerIndex}">Nickname Player ${playerIndex}</label><br><input type="text" id="nickname${playerIndex}" name="nickname${playerIndex}" value=""><br>`
+}
+
+function DisplayPlayerCountInputModal(){
+    $('#modal').modal('toggle');
+    document.querySelector(".modal-title").innerHTML = `Please Enter The Player Count`;
+
+    $('.modal-body').append('<input type="range" id="playerAmountInput" value="5" min="5" max="8" onchange="SetPlayerAmount(this.value)">');
+    $('.modal-body').append('<h2 id="playerAmountText"></h2>');
+    $('.modal-body').append('<button id="nextButton" onclick="DisplayNicknameInputModal();">Next</button>');
+
+    SetPlayerAmount(playerAmount);
+}
+
+export function DisplayNicknameInputModal(){
+    document.querySelector(".modal-title").innerHTML = `Please Enter Your Nicknames`;
+    document.querySelector('.modal-body').innerHTML = '';
+
+    for (var i = 0; i < playerAmount; i++){
+        $('.modal-body').append(GetNewNicknameInput(i+1));
+    }
+
+    $('.modal-body').append('<button id="doneButton" onclick="AddPlayers();">Done</button>');
+}
+
+export function SetPlayerAmount(playerAmountIn){
+    playerAmount = playerAmountIn;
+    document.getElementById('playerAmountText').innerHTML = playerAmount;
+}
+
+export function AddPlayers(){
+    for (var i=0;  i < playerAmount; i++){
+        var nickname = document.getElementById(`nickname${i+1}`).value
+        players.push(new Player(nickname, ""));
+    }
+    console.log(players);
+}
+

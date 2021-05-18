@@ -9,22 +9,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> 
-    <script src="game.js" type="module">
-    </script>
+    <script src="game.js" type="module"></script>
+
+    <link rel="stylesheet" href="./main.css">
 </head>
 <body>
    
-    <div>
-    
-    <button type="button" class="btnGooi btn btn-primary">Dices</button>
-    <section class="info">
-
-    </section>
-   <!-- Trigger the modal with a button -->
-<!--<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
--->
+<!--<button type="button" data-toggle="modal" data-target="#modal">Open Modal</button>-->
 <!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div id="modal" class="modal fade">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -34,17 +27,23 @@
         <h4 class="modal-title">Modal Header</h4>
       </div>
       <div class="modal-body">
-        <p>Some text in the modal.</p>
       </div>
-      <div class="modal-footer">
+      <!--<div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
+      </div>-->
     </div>
 
   </div>
 </div>
-<div>
-    <canvas width="1440" height="1245"></canvas>
+
+
+<!-- Boardgame canvas -->
+<div class="boardgame_container">
+    <img class="boardgame_image" src="./board.jpg" alt="boardgame">
+    <div class="status_container">
+    </div>
+    <!--<canvas width="1440" height="1245"></canvas>-->
 </div>
+
 </body>
 </html>  
