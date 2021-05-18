@@ -327,6 +327,13 @@ h3{
 img {vertical-align: middle;}
 
 
+/* trigger video */
+
+.triggervideo {
+  padding: 0 200px;
+  margin-bottom: 100px;
+
+}
 
 /*beginn slider*/
 .teamslide {
