@@ -24,7 +24,7 @@
 				<ul>
 
 					<li><img class="logo" src="pics/logo_blue.png" height="100px" width="100px"></li>
-					<li><a  href="index.html">Home</a></li>
+					<li><a class="aktiv" href="index.html">Home</a></li>
 
 					<li><a href="project.html">Project</a></li>
 
@@ -37,7 +37,7 @@
 							<li><a class="border" href="final_reflection.html">Final Reflection</a></li>
 						</ul>
 					</li>
-					<li><a class="aktiv" href="contact.html">Contact</a></li>
+					<li><a href="contact.html">Contact</a></li>
 				</ul>
 			</nav>
 		</div>
@@ -49,15 +49,41 @@
 			<h1>CONTACT US!</h1>
 		</div>
 
+		<div id="contact_form">
+            <form action="mailto:s107641@ap.be" method="post" enctype="text/plain">
+
+                <label for="author">Name:</label> <input type="text" id="author" name="author" class="required input_field" />
+								<div class="line"></div>
+
+                <div class="cleaner_h10"></div>
+                <label for="email">Email:</label> <input type="text" id="email" name="email" class="validate-email required input_field" />
+                <div class="cleaner_h10"></div>
+								<div class="line"></div>
+
+                <label for="phone">Phone:</label> <input type="text" name="phone" id="phone" class="input_field" />
+                <div class="cleaner_h10"></div>
+								<div class="line"></div>
+
+                <label for="text">Message:</label> <textarea id="text" name="text" rows="0" cols="0" class="required"></textarea>
+                <div class="cleaner_h10"></div>
+								<div class="line"></div>
+
+                <input type="submit" class="submit_btn float_l" name="submit" id="submit" value="Send" style="margin-left: 110px;" />
+                <input type="reset" class="submit_btn float_r" name="reset" id="reset" value="Reset" />
+
+            </form>
+        </div>
+    </div>
+
+		<!--
+
 		<div class="contact">
-			<!-- Formy code here -->
 			<form id="formy" name="formy" onSubmit="return validate(event);">
 
 
 
 				<div id="result"></div>
 
-				<!--Name field-->
 				<div class="input-field">
 					<i>
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 19.79">
@@ -72,7 +98,6 @@
 					<div class="lenghtCounter"><span></span></div>
 				</div>
 
-				<!--Email field-->
 				<div class="input-field">
 					<i>
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 12">
@@ -87,7 +112,6 @@
 					<div class="lenghtCounter"><span></span></div>
 				</div>
 
-				<!--Phone field-->
 				<div class="input-field">
 					<i>
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
@@ -102,7 +126,6 @@
 					<div class="lenghtCounter"><span></span></div>
 				</div>
 
-				<!--Message field-->
 				<div class="input-field">
 					<i>
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 18">
@@ -116,7 +139,6 @@
 					<label for="message">Your message</label>
 				</div>
 
-				<!--Submit button-->
 				<button type="submit" class="submit">
 					Submit
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17.2 17.6">
@@ -127,6 +149,9 @@
 					</svg>
 				</button>
 			</form>
+
+//-->
+
 			<!-- //formy code is over -->
 		</div>
 	</div>
