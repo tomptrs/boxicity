@@ -1,6 +1,6 @@
 export class Player{
-    constructor(nickname, pawnShape){
+    constructor(nickname, pawn){
         this.nickname = nickname;
-        this.pawnShape = pawnShape;
+        this.pawn = pawn;
     }
 }

@@ -1,4 +1,4 @@
-import {Card} from '../models/card.js'
+import {Card} from '../classes/card.js'
 
 export const cards =  []
 

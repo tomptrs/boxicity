@@ -1,8 +1,11 @@
-/*import {cards as stayhere} from "./services/stayhereService.js"
-import {cards as reflection} from "./services/reflectionService.js"
-import {cards as information} from "./services/informationService.js"*/
+import {cards as stayHereCards} from "./services/stayhereService.js"
+import {cards as reflectionCards} from "./services/reflectionService.js"
+import {cards as informationCards} from "./services/informationService.js"
+import {spots as boardgameSpots} from "./services/boargameSpotService.js"
 
 import { Player } from "./classes/Player.js";
+import { Pawn } from "./classes/Pawn.js";
+import { Vector2 } from "./classes/Vector2.js";
 
 
 
@@ -177,7 +180,7 @@ function CreatePionnen(){
 
 })*/
 
-export var playerAmount = 5;
+var playerAmount = 5;
 var players = []
 
 /* Once DOM is loaded, start the boardgame */
@@ -186,14 +189,40 @@ document.addEventListener("DOMContentLoaded",(event)=>{
     window.DisplayNicknameInputModal = DisplayNicknameInputModal;
     window.SetPlayerAmount = SetPlayerAmount;
     window.AddPlayers = AddPlayers;
+    window.ToggleModal = ToggleModal;
+    window.DisplayPlayerStatuses = DisplayPlayerStatuses;
+    window.GetPlayerAmount = GetPlayerAmount;
+    window.DrawBoardgame = DrawBoardgame;
 
     //TODO ask for playercount and nicknames
+    ToggleModal();
     DisplayPlayerCountInputModal();
 
-    //TODO display pawns and statuses
-    DisplayPlayerStatuses(playerAmount);
+    //TODO draw boardgame and players
+    //DrawBoardgame();
 })
 
+export function DrawBoardgame(){
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext("2d");
+
+    var img = document.createElement("img");
+    img.src = "./board.jpg";
+
+    img.addEventListener("load", () => {  
+        context.clearRect(0,0,3500,3500)
+        context.drawImage(img, 0, 0, 1370, 925);
+                  
+        for (var i=0; i < players.length; i++){
+            players[i].pawn.Draw(context)
+            context.font = "16px Arial";
+            context.fillStyle = '#000000'
+            context.fillText(players[i].nickname, players[i].pawn.location.x, players[i].pawn.location.y)
+        }
+    });
+
+
+}
 
 
 /* This returns the integer of the height of the document */
@@ -206,8 +235,8 @@ function GetDocumentHeight(){
 }
 
 /* This generates a new player status for the right side of the screen */
-function GetNewStatusDiv(height){
-    return '<div class="player_status" style="height: ' + height + 'px;"></div>';
+function GetNewStatusDiv(height, playerNo){
+    return '<div class="player_status" id="player_status' + playerNo + '" style="height: ' + height + 'px;"></div>';
 }
 
 
@@ -216,8 +245,13 @@ function DisplayPlayerStatuses(playerAmount){
     var status_height = (GetDocumentHeight() - 50) / playerAmount;
 
     for (var i = 0; i < playerAmount; i++){
-        $('.status_container').append(GetNewStatusDiv(status_height));
+        $('.status_container').append(GetNewStatusDiv(status_height, i + 1));
+        $('#player_status' + (i+1)).append(`<h2>Player ${i+1}: ${players[i].nickname}</h2>`)
     }
+}
+
+export function ToggleModal(){
+    $('#modal').modal('toggle');
 }
 
 function GetNewNicknameInput(playerIndex){
@@ -225,7 +259,6 @@ function GetNewNicknameInput(playerIndex){
 }
 
 function DisplayPlayerCountInputModal(){
-    $('#modal').modal('toggle');
     document.querySelector(".modal-title").innerHTML = `Please Enter The Player Count`;
 
     $('.modal-body').append('<input type="range" id="playerAmountInput" value="5" min="5" max="8" onchange="SetPlayerAmount(this.value)">');
@@ -243,7 +276,7 @@ export function DisplayNicknameInputModal(){
         $('.modal-body').append(GetNewNicknameInput(i+1));
     }
 
-    $('.modal-body').append('<button id="doneButton" onclick="AddPlayers();">Done</button>');
+    $('.modal-body').append('<button id="doneButton" onclick="AddPlayers(); ToggleModal(); DisplayPlayerStatuses(GetPlayerAmount()); DrawBoardgame();">Done</button>');
 }
 
 export function SetPlayerAmount(playerAmountIn){
@@ -251,11 +284,21 @@ export function SetPlayerAmount(playerAmountIn){
     document.getElementById('playerAmountText').innerHTML = playerAmount;
 }
 
+export function GetPlayerAmount(){
+    return playerAmount;
+}
+
 export function AddPlayers(){
     for (var i=0;  i < playerAmount; i++){
         var nickname = document.getElementById(`nickname${i+1}`).value
-        players.push(new Player(nickname, ""));
+
+        players.push(new Player(nickname, new Pawn(boardgameSpots[0].location, boardgameSpots[0], "")));
     }
-    console.log(players);
+
+    players.forEach(p => {
+        console.log('before move', p.pawn.location);
+        p.pawn.Move(boardgameSpots[0]);
+        console.log('after move', p.pawn.location);
+    });
 }
 
