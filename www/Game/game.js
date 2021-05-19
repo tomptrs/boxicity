@@ -217,7 +217,7 @@ export function DrawBoardgame(){
             players[i].pawn.Draw(context)
             context.font = "16px Arial";
             context.fillStyle = '#000000'
-            context.fillText(players[i].nickname, players[i].pawn.location.x, players[i].pawn.location.y)
+            context.fillText(players[i].nickname[0], players[i].pawn.location.x, players[i].pawn.location.y)
         }
     });
 
@@ -247,6 +247,7 @@ function DisplayPlayerStatuses(playerAmount){
     for (var i = 0; i < playerAmount; i++){
         $('.status_container').append(GetNewStatusDiv(status_height, i + 1));
         $('#player_status' + (i+1)).append(`<h2>Player ${i+1}: ${players[i].nickname}</h2>`)
+        document.querySelector(`#player_status${i+1}`).style.backgroundColor = `#${players[i].pawn.color}`;
     }
 }
 
@@ -255,7 +256,7 @@ export function ToggleModal(){
 }
 
 function GetNewNicknameInput(playerIndex){
-    return `<label for="nickname${playerIndex}">Nickname Player ${playerIndex}</label><br><input type="text" id="nickname${playerIndex}" name="nickname${playerIndex}" value=""><br>`
+    return `<label for="nickname${playerIndex}">Nickname Player ${playerIndex}</label><br><input type="text" value="${playerIndex}" id="nickname${playerIndex}" name="nickname${playerIndex}" value=""><br>`
 }
 
 function DisplayPlayerCountInputModal(){
@@ -276,7 +277,7 @@ export function DisplayNicknameInputModal(){
         $('.modal-body').append(GetNewNicknameInput(i+1));
     }
 
-    $('.modal-body').append('<button id="doneButton" onclick="AddPlayers(); ToggleModal(); DisplayPlayerStatuses(GetPlayerAmount()); DrawBoardgame();">Done</button>');
+    $('.modal-body').append('<button id="doneButton" onclick="AddPlayers(); ToggleModal(); DrawBoardgame(); DisplayPlayerStatuses(GetPlayerAmount());">Done</button>');
 }
 
 export function SetPlayerAmount(playerAmountIn){
@@ -296,9 +297,9 @@ export function AddPlayers(){
     }
 
     players.forEach(p => {
-        console.log('before move', p.pawn.location);
+        //console.log('before move', p.pawn.location);
         p.pawn.Move(boardgameSpots[0]);
-        console.log('after move', p.pawn.location);
+        //console.log('after move', p.pawn.location);
     });
 }
 

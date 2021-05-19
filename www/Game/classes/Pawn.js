@@ -16,14 +16,21 @@ export class Pawn{
         var randX = Math.floor(Math.random() * this.randomRange) * (Math.round(Math.random()) * 2 - 1);
         var randY = Math.floor(Math.random() * this.randomRange) * (Math.round(Math.random()) * 2 - 1);
 
-        this.location = newSpot.location;
-        this.location.Add(new Vector2(randX, randY));
+        this.location = JSON.parse(JSON.stringify(newSpot.location));
+        this.location.x += randX;
+        this.location.y += randY;
     }
 
     Draw(context){
+        context.beginPath();
+        context.arc(this.location.x, this.location.y, 22, 0, Math.PI*2, false);
+        context.fillStyle = '#000000';
+        context.fill();
+        
         context.beginPath()
         context.arc(this.location.x, this.location.y, 20, 0, Math.PI*2, false)
         context.fillStyle = this.color;
         context.fill()
+
     }
 }
