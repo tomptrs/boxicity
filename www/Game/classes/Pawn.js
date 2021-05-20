@@ -5,9 +5,14 @@ export class Pawn{
         this.location = location;
         this.currentSpot = currentSpot;
         this.shape = shape;
-        this.color = `#${Math.floor(Math.random()*16777215).toString(16)}`;
+        //this.color = `#${Math.floor(Math.random()*16777215).toString(16)}`;
+        //this.color = "hsl(" + 360 * Math.random() + ',' + (25 + 70 * Math.random()) + '%,' + (85 + 10 * Math.random()) + '%)';
+        
+        var hue = Math.floor(Math.random() * 360);
+        var pastel = 'hsl(' + hue + ', 100%, 80%)';
+        this.color = pastel;
 
-        this.randomRange = 50;
+        this.randomRange = 30;
     }
 
     Move(newSpot){
@@ -31,6 +36,5 @@ export class Pawn{
         context.arc(this.location.x, this.location.y, 20, 0, Math.PI*2, false)
         context.fillStyle = this.color;
         context.fill()
-
     }
 }

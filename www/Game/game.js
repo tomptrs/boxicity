@@ -182,6 +182,7 @@ function CreatePionnen(){
 
 var playerAmount = 5;
 var players = []
+var currentPlayerTurn = 0;
 
 /* Once DOM is loaded, start the boardgame */
 document.addEventListener("DOMContentLoaded",(event)=>{
@@ -193,14 +194,15 @@ document.addEventListener("DOMContentLoaded",(event)=>{
     window.DisplayPlayerStatuses = DisplayPlayerStatuses;
     window.GetPlayerAmount = GetPlayerAmount;
     window.DrawBoardgame = DrawBoardgame;
+    window.StartTurn = StartTurn;
 
     //TODO ask for playercount and nicknames
     ToggleModal();
-    DisplayPlayerCountInputModal();
 
-    //TODO draw boardgame and players
-    //DrawBoardgame();
+    //everything starts after this modal has been completed
+    DisplayPlayerCountInputModal();
 })
+
 
 export function DrawBoardgame(){
     var canvas = document.getElementById("canvas");
@@ -217,13 +219,12 @@ export function DrawBoardgame(){
             players[i].pawn.Draw(context)
             context.font = "16px Arial";
             context.fillStyle = '#000000'
-            context.fillText(players[i].nickname[0], players[i].pawn.location.x, players[i].pawn.location.y)
+            context.fillText(i+1, players[i].pawn.location.x, players[i].pawn.location.y)
         }
     });
 
 
 }
-
 
 /* This returns the integer of the height of the document */
 function GetDocumentHeight(){
@@ -246,8 +247,13 @@ function DisplayPlayerStatuses(playerAmount){
 
     for (var i = 0; i < playerAmount; i++){
         $('.status_container').append(GetNewStatusDiv(status_height, i + 1));
-        $('#player_status' + (i+1)).append(`<h2>Player ${i+1}: ${players[i].nickname}</h2>`)
-        document.querySelector(`#player_status${i+1}`).style.backgroundColor = `#${players[i].pawn.color}`;
+        $('#player_status' + (i+1)).append(`<p>Player ${i+1}: ${players[i].nickname}</p>`)
+        $('#player_status' + (i+1)).append(`<p>Current Spot: ${boardgameSpots.indexOf(players[i].pawn.currentSpot) + 1} -> ${players[i].pawn.currentSpot.type}</p>`)
+        if (i == currentPlayerTurn)
+            $('#player_status' + (i+1)).append(`<button id="turnButton${i+1}" onclick="StartTurn();">Start Turn</button>`)
+        else
+            $('#player_status' + (i+1)).append(`<button id="turnButton${i+1}" disabled onclick="StartTurn();">Start Turn</button>`)
+        document.getElementById(`player_status${i+1}`).style.backgroundColor = players[i].pawn.color;
     }
 }
 
@@ -255,8 +261,37 @@ export function ToggleModal(){
     $('#modal').modal('toggle');
 }
 
+function GetRandomFirstName(){
+    var firstNames = [];
+    firstNames.push('Liam');
+    firstNames.push('Olivia');
+    firstNames.push('Noah');
+    firstNames.push('Emma');
+    firstNames.push('Oliver');
+    firstNames.push('Ava');
+    firstNames.push('Elijah');
+    firstNames.push('Charlotte');
+    firstNames.push('William');
+    firstNames.push('Sophia');
+    firstNames.push('James');
+    firstNames.push('Amelia');
+    firstNames.push('Benjamin');
+    firstNames.push('Isabella');
+    firstNames.push('Lucas');
+    firstNames.push('Mia');
+    firstNames.push('Henry');
+    firstNames.push('Evelyn');
+    firstNames.push('Alexander');
+    firstNames.push('Harper');
+
+    var randy = Math.floor(Math.random() * firstNames.length);
+
+    return firstNames[randy];
+}
+
+//TODO remove random value of input before launching
 function GetNewNicknameInput(playerIndex){
-    return `<label for="nickname${playerIndex}">Nickname Player ${playerIndex}</label><br><input type="text" value="${playerIndex}" id="nickname${playerIndex}" name="nickname${playerIndex}" value=""><br>`
+    return `<label for="nickname${playerIndex}">Nickname Player ${playerIndex}</label><br><input type="text" value="${GetRandomFirstName()}" id="nickname${playerIndex}" name="nickname${playerIndex}" value=""><br>`
 }
 
 function DisplayPlayerCountInputModal(){
@@ -267,6 +302,27 @@ function DisplayPlayerCountInputModal(){
     $('.modal-body').append('<button id="nextButton" onclick="DisplayNicknameInputModal();">Next</button>');
 
     SetPlayerAmount(playerAmount);
+}
+
+
+//TODO stop when at finish and stop giving this player turns
+export function StartTurn(){
+    var currentSpotLocation = boardgameSpots.indexOf(players[currentPlayerTurn].pawn.currentSpot) + 1;
+    players[currentPlayerTurn].pawn.Move(boardgameSpots[currentSpotLocation + Math.floor(Math.random() * 6)]);
+    DrawBoardgame();
+    console.log(currentPlayerTurn)
+    if (currentPlayerTurn < players.length - 1){
+        document.getElementById(`turnButton${currentPlayerTurn + 1}`).disabled = true;
+        document.getElementById(`turnButton${currentPlayerTurn + 2}`).disabled = false;    
+        currentPlayerTurn++;
+    }
+    else{
+        console.log(`turnButton${currentPlayerTurn.length}`)
+        document.getElementById(`turnButton${players.length}`).disabled = true;
+        document.getElementById(`turnButton${1}`).disabled = false;    
+        currentPlayerTurn = 0;
+    }
+    console.log(currentPlayerTurn);
 }
 
 export function DisplayNicknameInputModal(){
