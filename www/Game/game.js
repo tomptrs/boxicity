@@ -1,21 +1,21 @@
-import {Bal} from './models/Bal.js'
-import {Vak} from "./models/Vak.js"
-import {cards as stayhere} from "./services/stayhereService.js"
-import {cards as reflection} from "./services/reflectionService.js"
-import {cards as information} from "./services/informationService.js"
+import {cards as stayHereCards} from "./services/stayhereService.js"
+import {cards as reflectionCards} from "./services/reflectionService.js"
+import {cards as informationCards} from "./services/informationService.js"
+import {spots as boardgameSpots} from "./services/boargameSpotService.js"
+
+import { Player } from "./classes/Player.js";
+import { Pawn } from "./classes/Pawn.js";
+import { Vector2 } from "./classes/Vector2.js";
 
 
-function gooi(){
+
+
+
+/*function gooi(){
     alert()
-}
+}*/
 
-document.addEventListener("DOMContentLoaded",(event)=>{
-    let canvas = document.querySelector("canvas")
-    let context = canvas.getContext("2d")
-    const btnGooi = document.querySelector(".btnGooi")
-    const infoSection = document.querySelector(".info")
-    let aanBeurt = 0; // pion 0 is eerst aan beurt
-    infoSection.innerHTML = ("player " + (aanBeurt+1) + " is aan de beurt") //send info
+/*document.addEventListener("DOMContentLoaded",(event)=>{
    const cardMessage = document.querySelector("#myModal")
     
    //initialize card counters
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded",(event)=>{
 
 
     //Wat er gedaan moet worden na een dobbelsteen gooi
-    if(btnGooi != "undefined"){
+    /*if(btnGooi != "undefined"){
         btnGooi.addEventListener("click",(arg)=>{
             
             let aantal = Math.round(Math.random()*2)+1  //gooi dobbelsteen
@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded",(event)=>{
             if(aanBeurt >= pionnen.length)
                 aanBeurt = 0
             
-            //TODO: Toon een opdracht aan de speler
+            //TOD: Toon een opdracht aan de speler
 
             
             infoSection.innerHTML = ("player " + (aanBeurt+1) + " is aan de beurt, staat nu op positie " + pionnen[aanBeurt].positie)
@@ -178,4 +178,187 @@ function CreatePionnen(){
     pionnen.push(pion3)
 }
 
+})*/
+
+var playerAmount = 5;
+var players = []
+var currentPlayerTurn = 0;
+
+/* Once DOM is loaded, start the boardgame */
+document.addEventListener("DOMContentLoaded",(event)=>{
+    //TODO load functions
+    window.DisplayNicknameInputModal = DisplayNicknameInputModal;
+    window.SetPlayerAmount = SetPlayerAmount;
+    window.AddPlayers = AddPlayers;
+    window.ToggleModal = ToggleModal;
+    window.DisplayPlayerStatuses = DisplayPlayerStatuses;
+    window.GetPlayerAmount = GetPlayerAmount;
+    window.DrawBoardgame = DrawBoardgame;
+    window.StartTurn = StartTurn;
+
+    //TODO ask for playercount and nicknames
+    ToggleModal();
+
+    //everything starts after this modal has been completed
+    DisplayPlayerCountInputModal();
 })
+
+
+export function DrawBoardgame(){
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext("2d");
+
+    var img = document.createElement("img");
+    img.src = "./board.jpg";
+
+    img.addEventListener("load", () => {  
+        context.clearRect(0,0,3500,3500)
+        context.drawImage(img, 0, 0, 1370, 925);
+                  
+        for (var i=0; i < players.length; i++){
+            players[i].pawn.Draw(context)
+            context.font = "16px Arial";
+            context.fillStyle = '#000000'
+            context.fillText(i+1, players[i].pawn.location.x, players[i].pawn.location.y)
+        }
+    });
+
+
+}
+
+/* This returns the integer of the height of the document */
+function GetDocumentHeight(){
+    var body = document.body;
+    var html = document.documentElement;
+
+    var height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+    return Math.round(height);
+}
+
+/* This generates a new player status for the right side of the screen */
+function GetNewStatusDiv(height, playerNo){
+    return '<div class="player_status" id="player_status' + playerNo + '" style="height: ' + height + 'px;"></div>';
+}
+
+
+/* This displays and adjusts the height of the player statuses according to how many players are present */
+function DisplayPlayerStatuses(playerAmount){
+    var status_height = (GetDocumentHeight() - 50) / playerAmount;
+
+    for (var i = 0; i < playerAmount; i++){
+        $('.status_container').append(GetNewStatusDiv(status_height, i + 1));
+        $('#player_status' + (i+1)).append(`<p>Player ${i+1}: ${players[i].nickname}</p>`)
+        $('#player_status' + (i+1)).append(`<p id="player_spot_info${i+1}">Current Spot: ${boardgameSpots.indexOf(players[i].pawn.currentSpot) + 1} -> ${players[i].pawn.currentSpot.type}</p>`)
+        if (i == currentPlayerTurn)
+            $('#player_status' + (i+1)).append(`<button class="turn_button" id="turn_button${i+1}" onclick="StartTurn();">Start Turn</button>`)
+        else
+            $('#player_status' + (i+1)).append(`<button class="turn_button" id="turn_button${i+1}" disabled onclick="StartTurn();">Start Turn</button>`)
+        document.getElementById(`player_status${i+1}`).style.backgroundColor = players[i].pawn.color;
+    }
+}
+
+function UpdatePlayerStatuses(){
+    document.getElementById(`player_spot_info${currentPlayerTurn+1}`).innerHTML = `Current Spot: ${boardgameSpots.indexOf(players[currentPlayerTurn].pawn.currentSpot) + 1} -> ${players[currentPlayerTurn].pawn.currentSpot.type}`
+}
+
+export function ToggleModal(){
+    $('#modal').modal('toggle');
+}
+
+function GetRandomFirstName(){
+    var firstNames = [];
+    firstNames.push('Liam');
+    firstNames.push('Olivia');
+    firstNames.push('Noah');
+    firstNames.push('Emma');
+    firstNames.push('Oliver');
+    firstNames.push('Ava');
+    firstNames.push('Elijah');
+    firstNames.push('Charlotte');
+    firstNames.push('William');
+    firstNames.push('Sophia');
+    firstNames.push('James');
+    firstNames.push('Amelia');
+    firstNames.push('Benjamin');
+    firstNames.push('Isabella');
+    firstNames.push('Lucas');
+    firstNames.push('Mia');
+    firstNames.push('Henry');
+    firstNames.push('Evelyn');
+    firstNames.push('Alexander');
+    firstNames.push('Harper');
+
+    var randy = Math.floor(Math.random() * firstNames.length);
+
+    return firstNames[randy];
+}
+
+//TODO remove random value of input before launching
+function GetNewNicknameInput(playerIndex){
+    return `<label class="nickname_input_label" id="nickname_input_label${playerIndex}" for="nickname${playerIndex}">Nickname Player ${playerIndex}</label><br><input class="nickname_input" id="nickname_input${playerIndex}" type="text" value="${GetRandomFirstName()}" name="nickname${playerIndex}" value=""><br>`
+}
+
+function DisplayPlayerCountInputModal(){
+    document.querySelector(".modal-title").innerHTML = `Please Enter The Player Count`;
+
+    $('.modal-body').append('<input type="range" id="player_amount_input" value="5" min="5" max="8" onchange="SetPlayerAmount(this.value)">');
+    $('.modal-body').append('<h2 id="player_amount_text"></h2>');
+    $('.modal-body').append('<button id="next_button" onclick="DisplayNicknameInputModal();">Next</button>');
+
+    SetPlayerAmount(playerAmount);
+}
+
+
+//TODO stop when at finish and stop giving this player turns
+export function StartTurn(){
+    var currentSpotLocation = boardgameSpots.indexOf(players[currentPlayerTurn].pawn.currentSpot) + 1;
+    players[currentPlayerTurn].pawn.Move(boardgameSpots[currentSpotLocation + Math.floor(Math.random() * 6)]);
+    UpdatePlayerStatuses();
+    DrawBoardgame();
+    if (currentPlayerTurn < players.length - 1){
+        document.getElementById(`turn_button${currentPlayerTurn + 1}`).disabled = true;
+        document.getElementById(`turn_button${currentPlayerTurn + 2}`).disabled = false;    
+        currentPlayerTurn++;
+    }
+    else{
+        document.getElementById(`turn_button${players.length}`).disabled = true;
+        document.getElementById(`turn_button${1}`).disabled = false;    
+        currentPlayerTurn = 0;
+    }
+    console.log(currentPlayerTurn);
+}
+
+export function DisplayNicknameInputModal(){
+    document.querySelector(".modal-title").innerHTML = `Please Enter Your Nicknames`;
+    document.querySelector('.modal-body').innerHTML = '';
+
+    for (var i = 0; i < playerAmount; i++){
+        $('.modal-body').append(GetNewNicknameInput(i+1));
+    }
+
+    $('.modal-body').append('<button id="doneButton" onclick="AddPlayers(); ToggleModal(); DrawBoardgame(); DisplayPlayerStatuses(GetPlayerAmount());">Done</button>');
+}
+
+export function SetPlayerAmount(playerAmountIn){
+    playerAmount = playerAmountIn;
+    document.getElementById('player_amount_text').innerHTML = playerAmount;
+}
+
+export function GetPlayerAmount(){
+    return playerAmount;
+}
+
+export function AddPlayers(){
+    for (var i=0;  i < playerAmount; i++){
+        var nickname = document.getElementById(`nickname_input${i+1}`).value
+
+        players.push(new Player(nickname, new Pawn(boardgameSpots[0].location, boardgameSpots[0], "")));
+    }
+
+    players.forEach(p => {
+        //console.log('before move', p.pawn.location);
+        p.pawn.Move(boardgameSpots[0]);
+        //console.log('after move', p.pawn.location);
+    });
+}
+
