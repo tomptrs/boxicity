@@ -7,6 +7,8 @@ import { Player } from "./classes/Player.js";
 import { Pawn } from "./classes/Pawn.js";
 import { Vector2 } from "./classes/Vector2.js";
 
+import { Color } from "./services/colorService.js"
+
 
 
 
@@ -96,7 +98,7 @@ import { Vector2 } from "./classes/Vector2.js";
 
 
     let img = document.createElement("img");
-    img.src = "board.jpg";
+    img.src = "board.png";
     img.addEventListener("load", () => {  
     context.drawImage(img, 50, 10);
     for(let i=0;i<pionnen.length;i++)
@@ -186,6 +188,7 @@ var currentPlayerTurn = 0;
 
 /* Once DOM is loaded, start the boardgame */
 document.addEventListener("DOMContentLoaded",(event)=>{
+    //const Color = new Color();
     //TODO load functions
     window.DisplayNicknameInputModal = DisplayNicknameInputModal;
     window.SetPlayerAmount = SetPlayerAmount;
@@ -209,7 +212,7 @@ export function DrawBoardgame(){
     var context = canvas.getContext("2d");
 
     var img = document.createElement("img");
-    img.src = "./board.jpg";
+    img.src = "./board.png";
 
     img.addEventListener("load", () => {  
         context.clearRect(0,0,3500,3500)
@@ -253,11 +256,24 @@ function DisplayPlayerStatuses(playerAmount){
             $('#player_status' + (i+1)).append(`<button class="turn_button" id="turn_button${i+1}" onclick="StartTurn();">Start Turn</button>`)
         else
             $('#player_status' + (i+1)).append(`<button class="turn_button" id="turn_button${i+1}" disabled onclick="StartTurn();">Start Turn</button>`)
-        document.getElementById(`player_status${i+1}`).style.backgroundColor = players[i].pawn.color;
+        
+        var halfOpacityColor = `#${players[i].pawn.color.substring(1)}80`;
+        document.getElementById(`player_status${i+1}`).style.backgroundColor = halfOpacityColor;
+        UpdatePlayerStatuses();
     }
 }
 
 function UpdatePlayerStatuses(){
+    for (let i = 0; i < players.length; i++) {
+        try{
+            document.getElementById(`player_spot_info${i+1}`).style.display = "none";    
+            document.getElementById(`turn_button${i+1}`).style.display = "none";
+        } catch (err){
+            console.log('document doesnt exist');
+        }
+    }
+    document.getElementById(`player_spot_info${currentPlayerTurn+1}`).style.display = "block";
+    document.getElementById(`turn_button${currentPlayerTurn+1}`).style.display = "block";
     document.getElementById(`player_spot_info${currentPlayerTurn+1}`).innerHTML = `Current Spot: ${boardgameSpots.indexOf(players[currentPlayerTurn].pawn.currentSpot) + 1} -> ${players[currentPlayerTurn].pawn.currentSpot.type}`
 }
 
@@ -325,7 +341,7 @@ export function StartTurn(){
         document.getElementById(`turn_button${1}`).disabled = false;    
         currentPlayerTurn = 0;
     }
-    console.log(currentPlayerTurn);
+    UpdatePlayerStatuses();
 }
 
 export function DisplayNicknameInputModal(){
@@ -349,10 +365,12 @@ export function GetPlayerAmount(){
 }
 
 export function AddPlayers(){
+    const color = new Color();
+
     for (var i=0;  i < playerAmount; i++){
         var nickname = document.getElementById(`nickname_input${i+1}`).value
 
-        players.push(new Player(nickname, new Pawn(boardgameSpots[0].location, boardgameSpots[0], "")));
+        players.push(new Player(nickname, new Pawn(boardgameSpots[0].location, boardgameSpots[0], "", color.GetColor(i))));
     }
 
     players.forEach(p => {
