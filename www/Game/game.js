@@ -7,8 +7,100 @@ import { Player } from "./classes/Player.js";
 import { Pawn } from "./classes/Pawn.js";
 import { Vector2 } from "./classes/Vector2.js";
 
+import { Color } from "./services/colorService.js"
 
 
+
+let theWheel = new Winwheel({
+    'numSegments': 5,
+    'outerRadius': 212,
+    'textFontSize': 28,
+    'segments':
+      [
+        { 'fillStyle': '#eae56f', 'text': '1' },
+        { 'fillStyle': '#89f26e', 'text': '2' },
+        { 'fillStyle': '#7de6ef', 'text': '3' },
+        { 'fillStyle': '#e7706f', 'text': '4' },
+        { 'fillStyle': '#e7706f', 'text': '5' }
+      ],
+    'animation':
+    {
+      'type': 'spinToStop',
+      'duration': 5,
+      'spins': 8,
+      'callbackFinished': alertPrize
+    }
+  });
+
+  let wheelPower = 0;
+  let wheelSpinning = false;
+
+
+  export function powerSelected(powerLevel) {
+    if (wheelSpinning == false) {
+      document.getElementById('pw1').className = "";
+      document.getElementById('pw2').className = "";
+      document.getElementById('pw3').className = "";
+
+      if (powerLevel >= 1) {
+        document.getElementById('pw1').className = "pw1";
+      }
+
+      if (powerLevel >= 2) {
+        document.getElementById('pw2').className = "pw2";
+      }
+
+      if (powerLevel >= 3) {
+        document.getElementById('pw3').className = "pw3";
+      }
+
+      wheelPower = powerLevel;
+
+      document.getElementById('spin_button').src = "spin_on.png";
+      document.getElementById('spin_button').className = "clickable";
+    }
+  }
+
+  export function startSpin() {
+    if (wheelSpinning == false) {
+      if (wheelPower == 1) {
+        theWheel.animation.spins = 3;
+      } else if (wheelPower == 2) {
+        theWheel.animation.spins = 8;
+      } else if (wheelPower == 3) {
+        theWheel.animation.spins = 15;
+      }
+
+      theWheel.startAnimation();
+      wheelSpinning = true;
+    }
+  }
+
+  export function resetWheel() {
+    theWheel.stopAnimation(false);
+    theWheel.rotationAngle = 0;
+    theWheel.draw();
+
+    wheelSpinning = false;
+  }
+
+  export function alertPrize(indicatedSegment) {
+    var currentSpotLocation = boardgameSpots.indexOf(players[currentPlayerTurn].pawn.currentSpot) + 1;
+    var newSpotLocation = currentSpotLocation + parseInt(indicatedSegment.text); 
+    if (newSpotLocation >= boardgameSpots.length){
+        playerAmount.reachedFinish = true;
+        players[currentPlayerTurn].pawn.Move(boardgameSpots[boardgameSpots.length-1]);
+        alert(`Player ${currentPlayerTurn} has reached the finish`)
+    } else {
+        players[currentPlayerTurn].pawn.Move(boardgameSpots[newSpotLocation - 1]);
+    }
+
+    resetWheel();
+    UpdatePlayerStatuses();
+    DrawBoardgame();
+    ToggleWheelModal();
+    DisplaySpot();
+  }
 
 
 /*function gooi(){
@@ -105,22 +197,22 @@ import { Vector2 } from "./classes/Vector2.js";
 });
 
 function ShowCard(info, question){
-    document.querySelector(".modal-title").innerHTML = info
-    document.querySelector(".modal-body").innerHTML = question
+    document.querySelector("#modal-title").innerHTML = info
+    document.querySelector("#modal-body").innerHTML = question
     $('#myModal').modal('toggle')
 }
 
 function ShowVRCode(){
     
-    document.querySelector(".modal-title").innerHTML = "Scan the code with your smartphone"
-    document.querySelector(".modal-body").innerHTML = "<img src='images/ScanVRBoxicity.png' width='300' height='300'>"
+    document.querySelector("#modal-title").innerHTML = "Scan the code with your smartphone"
+    document.querySelector("#modal-body").innerHTML = "<img src='images/ScanVRBoxicity.png' width='300' height='300'>"
     $('#myModal').modal('toggle')
 }
 
 function ShowARCode(){
     
-    document.querySelector(".modal-title").innerHTML = "Scan the code with your smartphone"
-    document.querySelector(".modal-body").innerHTML = "<img src='images/scanAR.png' width='300' height='300'>"
+    document.querySelector("#modal-title").innerHTML = "Scan the code with your smartphone"
+    document.querySelector("#modal-body").innerHTML = "<img src='images/scanAR.png' width='300' height='300'>"
     $('#myModal').modal('toggle')
 }
    
@@ -186,6 +278,7 @@ var currentPlayerTurn = 0;
 
 /* Once DOM is loaded, start the boardgame */
 document.addEventListener("DOMContentLoaded",(event)=>{
+    //const Color = new Color();
     //TODO load functions
     window.DisplayNicknameInputModal = DisplayNicknameInputModal;
     window.SetPlayerAmount = SetPlayerAmount;
@@ -195,6 +288,11 @@ document.addEventListener("DOMContentLoaded",(event)=>{
     window.GetPlayerAmount = GetPlayerAmount;
     window.DrawBoardgame = DrawBoardgame;
     window.StartTurn = StartTurn;
+    window.EndTurn = EndTurn;
+    window.startSpin = startSpin;
+    window.powerSelected = powerSelected;
+    window.resetWheel = resetWheel;
+    window.alertPrize = alertPrize;
 
     //TODO ask for playercount and nicknames
     ToggleModal();
@@ -253,11 +351,24 @@ function DisplayPlayerStatuses(playerAmount){
             $('#player_status' + (i+1)).append(`<button class="turn_button" id="turn_button${i+1}" onclick="StartTurn();">Start Turn</button>`)
         else
             $('#player_status' + (i+1)).append(`<button class="turn_button" id="turn_button${i+1}" disabled onclick="StartTurn();">Start Turn</button>`)
-        document.getElementById(`player_status${i+1}`).style.backgroundColor = players[i].pawn.color;
+        
+        var halfOpacityColor = `#${players[i].pawn.color.substring(1)}80`;
+        document.getElementById(`player_status${i+1}`).style.backgroundColor = halfOpacityColor;
+        UpdatePlayerStatuses();
     }
 }
 
 function UpdatePlayerStatuses(){
+    for (let i = 0; i < players.length; i++) {
+        try{
+            document.getElementById(`player_spot_info${i+1}`).style.display = "none";    
+            document.getElementById(`turn_button${i+1}`).style.display = "none";
+        } catch (err){
+            console.log('document doesnt exist');
+        }
+    }
+    document.getElementById(`player_spot_info${currentPlayerTurn+1}`).style.display = "block";
+    document.getElementById(`turn_button${currentPlayerTurn+1}`).style.display = "block";
     document.getElementById(`player_spot_info${currentPlayerTurn+1}`).innerHTML = `Current Spot: ${boardgameSpots.indexOf(players[currentPlayerTurn].pawn.currentSpot) + 1} -> ${players[currentPlayerTurn].pawn.currentSpot.type}`
 }
 
@@ -299,44 +410,111 @@ function GetNewNicknameInput(playerIndex){
 }
 
 function DisplayPlayerCountInputModal(){
-    document.querySelector(".modal-title").innerHTML = `Please Enter The Player Count`;
+    document.querySelector("#modal-title").innerHTML = `Please Enter The Player Count`;
 
-    $('.modal-body').append('<input type="range" id="player_amount_input" value="5" min="5" max="8" onchange="SetPlayerAmount(this.value)">');
-    $('.modal-body').append('<h2 id="player_amount_text"></h2>');
-    $('.modal-body').append('<button id="next_button" onclick="DisplayNicknameInputModal();">Next</button>');
+    $('#modal-body').append('<input type="range" id="player_amount_input" value="5" min="5" max="8" onchange="SetPlayerAmount(this.value)">');
+    $('#modal-body').append('<h2 id="player_amount_text"></h2>');
+    $('#modal-body').append('<button id="next_button" onclick="DisplayNicknameInputModal();">Next</button>');
 
     SetPlayerAmount(playerAmount);
 }
 
 
+function DisplayCard(){
+    var cards = [];
+
+    switch (players[currentPlayerTurn].pawn.currentSpot.type) {
+        case 'reflection':
+            cards = reflectionCards;
+            break;
+        case 'information':
+            cards = informationCards;
+            break;
+        case 'stay here':
+            cards = stayHereCards;
+            break;
+        default:
+            break;
+    }
+
+    document.querySelector("#modal-title").innerHTML = cards[Math.round(Math.random() * (cards.length - 1))].question
+    document.querySelector("#modal-body").innerHTML = cards[Math.round(Math.random() * (cards.length - 1))].answer
+    ToggleModal();
+}
+
+function DisplaySpot(){
+    switch (players[currentPlayerTurn].pawn.currentSpot.type) {
+        case 'reflection':
+        case 'information':
+        case 'stay here':
+            DisplayCard();
+            break;
+        case 'vr':
+            DisplayVR();
+        default:
+            break;
+    }
+
+    document.querySelector("#modal-footer").innerHTML = `<button onclick="EndTurn();">Done</button>`
+}
+
+function DisplayVR(){
+    document.querySelector("#modal-title").innerHTML = "Scan the code with your smartphone"
+    document.querySelector("#modal-body").innerHTML = "<img src='images/ScanVRBoxicity.png' width='300' height='300'>"
+    ToggleModal();
+}
+
+function DisplayAR(){
+    
+    document.querySelector("#modal-title").innerHTML = "Scan the code with your smartphone"
+    document.querySelector("#modal-body").innerHTML = "<img src='images/scanAR.png' width='300' height='300'>"
+    ToggleModal();
+}
+
+
+
 //TODO stop when at finish and stop giving this player turns
 export function StartTurn(){
-    var currentSpotLocation = boardgameSpots.indexOf(players[currentPlayerTurn].pawn.currentSpot) + 1;
-    players[currentPlayerTurn].pawn.Move(boardgameSpots[currentSpotLocation + Math.floor(Math.random() * 6)]);
-    UpdatePlayerStatuses();
-    DrawBoardgame();
+    ToggleWheelModal();
+}
+
+export function EndTurn(){
     if (currentPlayerTurn < players.length - 1){
         document.getElementById(`turn_button${currentPlayerTurn + 1}`).disabled = true;
         document.getElementById(`turn_button${currentPlayerTurn + 2}`).disabled = false;    
         currentPlayerTurn++;
+        while (players[currentPlayerTurn].pawn.reachedFinish){
+            currentPlayerTurn++;
+        }
     }
     else{
         document.getElementById(`turn_button${players.length}`).disabled = true;
         document.getElementById(`turn_button${1}`).disabled = false;    
         currentPlayerTurn = 0;
+        if (players[currentPlayerTurn].pawn.reachedFinish){
+            currentPlayerTurn++;
+            while (players[currentPlayerTurn].pawn.reachedFinish){
+                currentPlayerTurn++;
+            }
+        }
     }
-    console.log(currentPlayerTurn);
+    UpdatePlayerStatuses();
+    ToggleModal();
+}
+
+function ToggleWheelModal(){
+     $('#wheelModal').modal('toggle');
 }
 
 export function DisplayNicknameInputModal(){
-    document.querySelector(".modal-title").innerHTML = `Please Enter Your Nicknames`;
-    document.querySelector('.modal-body').innerHTML = '';
+    document.querySelector("#modal-title").innerHTML = `Please Enter Your Nicknames`;
+    document.querySelector('#modal-body').innerHTML = '';
 
     for (var i = 0; i < playerAmount; i++){
-        $('.modal-body').append(GetNewNicknameInput(i+1));
+        $('#modal-body').append(GetNewNicknameInput(i+1));
     }
 
-    $('.modal-body').append('<button id="doneButton" onclick="AddPlayers(); ToggleModal(); DrawBoardgame(); DisplayPlayerStatuses(GetPlayerAmount());">Done</button>');
+    $('#modal-body').append('<button id="doneButton" onclick="AddPlayers(); ToggleModal(); DrawBoardgame(); DisplayPlayerStatuses(GetPlayerAmount());">Done</button>');
 }
 
 export function SetPlayerAmount(playerAmountIn){
@@ -349,10 +527,12 @@ export function GetPlayerAmount(){
 }
 
 export function AddPlayers(){
+    const color = new Color();
+
     for (var i=0;  i < playerAmount; i++){
         var nickname = document.getElementById(`nickname_input${i+1}`).value
 
-        players.push(new Player(nickname, new Pawn(boardgameSpots[0].location, boardgameSpots[0], "")));
+        players.push(new Player(nickname, new Pawn(boardgameSpots[0].location, boardgameSpots[0], "", color.GetColor(i))));
     }
 
     players.forEach(p => {
