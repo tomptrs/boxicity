@@ -14,6 +14,7 @@ export class Pawn{
         this.color = pastel;*/
 
         this.color = color;
+        this.reachedFinish = false;
 
         this.randomRange = 30;
     }
