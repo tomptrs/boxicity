@@ -161,7 +161,9 @@ function GetDocumentHeight(){
     var html = document.documentElement;
 
     var height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
-    return Math.round(height);
+    console.log(Math.round(height));
+    var h = window.innerHeight;
+    return Math.round(h);
 }
 
 /* This generates a new player status for the right side of the screen */
