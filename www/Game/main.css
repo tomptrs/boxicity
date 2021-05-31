@@ -4,25 +4,27 @@ body {
 
 .boardgame_container{
     display: flex;
+    height: fit-content;
+    width: 100%;
     align-content: center;
     align-items: center;
     justify-content: center;
-    width: 80%;
-    margin-left: 150px;
-    margin-bottom: 10px;
 }
 
 .status_container{
-    width: 230px;
+    width: 30%;
+    height: auto;
     display: flex;
     align-content: center;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    position: fixed; 
-    right: 10px;
-    bottom: 10px;
     color: black;
+}
+
+#canvas{
+    width: 70%;
+    height: auto;
 }
 
 
