@@ -29,6 +29,9 @@ body {
 .player_status{
     width: 100%;
     height: auto;
+    padding: 7px;
+    margin: 1.5px 0;
+    line-height: 1.8em;
 }
 
 
@@ -113,6 +116,7 @@ td.pw3
     border-radius: 5px;
     background-color: #f1d6e5;
     color: black;
+    margin-top: 0.3em;
 }
 
 .turn_button:hover {
