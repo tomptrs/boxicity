@@ -16,11 +16,11 @@ let theWheel = new Winwheel({
     'textFontSize': 28,
     'segments':
       [
-        { 'fillStyle': '#eae56f', 'text': '1' },
-        { 'fillStyle': '#89f26e', 'text': '2' },
-        { 'fillStyle': '#7de6ef', 'text': '3' },
-        { 'fillStyle': '#e7706f', 'text': '4' },
-        { 'fillStyle': '#e7706f', 'text': '5' }
+        { 'fillStyle': '#8fabda', 'text': '1' },
+        { 'fillStyle': '#fbb919', 'text': '2' },
+        { 'fillStyle': '#69c2c0', 'text': '3' },
+        { 'fillStyle': '#e9570d', 'text': '4' },
+        { 'fillStyle': '#f1d6e5', 'text': '5' }
       ],
     'animation':
     {
@@ -161,7 +161,9 @@ function GetDocumentHeight(){
     var html = document.documentElement;
 
     var height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
-    return Math.round(height);
+    console.log(Math.round(height));
+    var h = window.innerHeight;
+    return Math.round(h);
 }
 
 /* This generates a new player status for the right side of the screen */
