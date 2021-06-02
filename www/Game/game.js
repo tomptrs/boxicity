@@ -276,9 +276,9 @@ function DisplayCard() {
         default:
             break;
     }
-
-    document.querySelector("#modal-title").innerHTML = cards[Math.round(Math.random() * (cards.length - 1))].question
-    document.querySelector("#modal-body").innerHTML = cards[Math.round(Math.random() * (cards.length - 1))].answer
+    let nr = Math.round(Math.random() * (cards.length - 1))
+    document.querySelector("#modal-title").innerHTML = cards[nr].question
+    document.querySelector("#modal-body").innerHTML = cards[nr].answer
     ToggleModal();
 }
 
