@@ -277,6 +277,8 @@ function DisplayCard() {
             break;
     }
     let nr = Math.round(Math.random() * (cards.length - 1))
+    console.log(cards[nr].question)
+    console.log(cards[nr].answer)
     document.querySelector("#modal-title").innerHTML = cards[nr].question
     document.querySelector("#modal-body").innerHTML = cards[nr].answer
     ToggleModal();

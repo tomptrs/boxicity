@@ -1,5 +1,5 @@
 export class Card{
-    constructor(type, question, answer){
+    constructor(question, answer){
         this.question = question;
         this.answer = answer;
     }
