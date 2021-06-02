@@ -1,0 +1,34 @@
+<html lang='en'>
+    <head>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <title>AR Demo Tom Peeters</title>
+
+        <!-- external resources -->
+        <link rel='preconnect' href='https://fonts.gstatic.com'>
+        <link href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&family=Teko:wght@700&display=swap'
+            rel='stylesheet'>
+        <link rel='stylesheet' href='/www/style.css'>
+        <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+        <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+        <script src='/www/main.js' defer></script>
+    </head>
+
+    <body class='app'>
+       <h1>AR-demo</h1>
+       Click LOGO: 
+       <model-viewer
+       src="girl_2.glb"
+       ar
+       ar-modes="webxr scene-viewer quick-look"
+       ar-scale="auto"
+       camera-controls
+       alt="A 3D model of an astronaut"
+       ios-src="modelApple.usdz"
+       <!--ios-src="https://developer.apple.com/augmented-reality/quick-look/models/tulip/flower_tulip.usdz"-->
+    </model-viewer>
+     
+     </model-viewer>
+
+    </body>
+</html>
