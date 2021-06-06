@@ -95,9 +95,8 @@ export function alertPrize(indicatedSegment) {
     var currentSpotLocation = boardgameSpots.indexOf(players[currentPlayerTurn].pawn.currentSpot) + 1;
     var newSpotLocation = currentSpotLocation + parseInt(indicatedSegment.text);
     if (newSpotLocation >= boardgameSpots.length) {
-        playerAmount.reachedFinish = true;
+        players[currentPlayerTurn].pawn.reachedFinish = true;
         players[currentPlayerTurn].pawn.Move(boardgameSpots[boardgameSpots.length - 1]);
-        alert(`Player ${currentPlayerTurn} has reached the finish`)
     } else {
         players[currentPlayerTurn].pawn.Move(boardgameSpots[newSpotLocation - 1]);
     }
@@ -131,6 +130,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     window.powerSelected = powerSelected;
     window.resetWheel = resetWheel;
     window.alertPrize = alertPrize;
+    window.OpenInteractiveStory = OpenInteractiveStory;
 
     //TODO ask for playercount and nicknames
     ToggleModal();
@@ -283,6 +283,8 @@ function DisplayCard() {
 }
 
 function DisplaySpot() {
+    var functions = 'EndTurn();';
+
     switch (players[currentPlayerTurn].pawn.currentSpot.type) {
         case 'reflection':
             DisplayCard();
@@ -295,11 +297,38 @@ function DisplaySpot() {
             break;
         case 'vr':
             DisplayVR();
+        case 'dice':
+            DisplaySpotModal("Wow!", "You have landed on a 'dice' spot, you get another turn!");
+            functions = '';
+            break;
+        case 'back':
+            DisplaySpotModal("Oh no!", "You have landed on a 'go back' spot, you went two spaces back!");
+            functions += 'MovePlayerBack();'
+            break;
+        case 'minigame':
+            DisplaySpotModal("Temporary!", "This is where the minigame link will come!");
+            break;
+        case 'interactive story':
+            DisplaySpotModal("Interactive Story!", `Click the following link to navigate to the interactive story minigame! <button onclick="OpenInteractiveStory();">Click Here!</button>`);
+            break;
+        case 'finish':
+            DisplaySpotModal("Congratulations!", "You have reached the finish!");
+            break;
         default:
             break;
     }
 
-    document.querySelector("#modal-footer").innerHTML = `<button onclick="EndTurn();">Done</button>`
+    document.querySelector("#modal-footer").innerHTML = `<button onclick="${functions}">Done</button>`
+}
+
+export function OpenInteractiveStory(){
+    window.open(`localhost:3001/InteractiveStory/index.html`)
+}
+
+function DisplaySpotModal(title, body){
+    document.querySelector("#modal-title").innerHTML = title
+    document.querySelector("#modal-body").innerHTML = body
+    ToggleModal();
 }
 
 function DisplayVR() {
@@ -322,11 +351,24 @@ export function StartTurn() {
 }
 
 export function EndTurn() {
+
+    var playersFinished = 0;
+    players.forEach(p => {
+        if (p.pawn.reachedFinish)
+            playersFinished++;
+    });
+
+    if(playersFinished == players.length)
+        EndGame();
+
+
     if (currentPlayerTurn < players.length - 1) {
         document.getElementById(`turn_button${currentPlayerTurn + 1}`).disabled = true;
         document.getElementById(`turn_button${currentPlayerTurn + 2}`).disabled = false;
         currentPlayerTurn++;
         while (players[currentPlayerTurn].pawn.reachedFinish) {
+            document.getElementById(`turn_button${currentPlayerTurn + 1}`).disabled = true;
+            document.getElementById(`turn_button${currentPlayerTurn + 2}`).disabled = false;    
             currentPlayerTurn++;
         }
     }
@@ -337,13 +379,21 @@ export function EndTurn() {
         if (players[currentPlayerTurn].pawn.reachedFinish) {
             currentPlayerTurn++;
             while (players[currentPlayerTurn].pawn.reachedFinish) {
+                document.getElementById(`turn_button${currentPlayerTurn + 1}`).disabled = true;
+                document.getElementById(`turn_button${currentPlayerTurn + 2}`).disabled = false;                
                 currentPlayerTurn++;
             }
         }
     }
     UpdatePlayerStatuses();
 
+
     ToggleModal();
+}
+
+function EndGame(){
+    alert(`Amazing! Everyone has reached the finish! The game will now close.`);
+    window.location.href = 'http://localhost:3001/index.html'
 }
 
 function ToggleWheelModal() {
