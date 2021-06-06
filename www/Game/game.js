@@ -276,13 +276,9 @@ function DisplayCard() {
         default:
             break;
     }
-
-    var randomQuestion = cards[Math.round(Math.random() * (cards.length - 1))].question;
-    var randomAnswer = cards[Math.round(Math.random() * (cards.length - 1))].answer;
-
-    console.log(randomQuestion, randomAnswer)
-    document.querySelector("#modal-title").innerHTML = cards[Math.round(Math.random() * (cards.length - 1))].question
-    document.querySelector("#modal-body").innerHTML = cards[Math.round(Math.random() * (cards.length - 1))].answer
+    let nr = Math.round(Math.random() * (cards.length - 1))
+    document.querySelector("#modal-title").innerHTML = cards[nr].question
+    document.querySelector("#modal-body").innerHTML = cards[nr].answer
     ToggleModal();
 }
 
