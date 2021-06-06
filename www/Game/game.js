@@ -131,6 +131,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     window.resetWheel = resetWheel;
     window.alertPrize = alertPrize;
     window.OpenInteractiveStory = OpenInteractiveStory;
+    window.MovePlayerBack = MovePlayerBack;
+    window.DisplaySpot = DisplaySpot;
 
     //TODO ask for playercount and nicknames
     ToggleModal();
@@ -168,7 +170,6 @@ function GetDocumentHeight() {
     var html = document.documentElement;
 
     var height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
-    console.log(Math.round(height));
     var h = window.innerHeight;
     return Math.round(h);
 }
@@ -185,12 +186,12 @@ function DisplayPlayerStatuses(playerAmount) {
 
     for (var i = 0; i < playerAmount; i++) {
         $('.status_container').append(GetNewStatusDiv(status_height, i + 1));
-        $('#player_status' + (i + 1)).append(`<p>Player ${i + 1}: ${players[i].nickname}</p>`)
-        $('#player_status' + (i + 1)).append(`<p id="player_spot_info${i + 1}">Current Spot: ${boardgameSpots.indexOf(players[i].pawn.currentSpot) + 1} -> ${players[i].pawn.currentSpot.type}</p>`)
+        $('#player_status' + (i + 1)).append(`<p class="player_nickname">${players[i].nickname}</p>`)
+        $('#player_status' + (i + 1)).append(`<p class="player_spot_info" id="player_spot_info${i + 1}">Location ${boardgameSpots.indexOf(players[i].pawn.currentSpot) + 1}: ${players[i].pawn.currentSpot.type}</p>`)
         if (i == currentPlayerTurn)
-            $('#player_status' + (i + 1)).append(`<button class="turn_button" id="turn_button${i + 1}" onclick="StartTurn();">Start Turn</button>`)
+            $('#player_status' + (i + 1)).append(`<div class="turn_button_container"><button class="turn_button up" id="turn_button${i + 1}" onclick="StartTurn();">Start Turn</button></div>`)
         else
-            $('#player_status' + (i + 1)).append(`<button class="turn_button" id="turn_button${i + 1}" disabled onclick="StartTurn();">Start Turn</button>`)
+            $('#player_status' + (i + 1)).append(`<div class="turn_button_container"><button class="turn_button up" id="turn_button${i + 1}" disabled onclick="StartTurn();">Start Turn</button></div>`)
 
         var halfOpacityColor = `#${players[i].pawn.color.substring(1)}80`;
         document.getElementById(`player_status${i + 1}`).style.backgroundColor = halfOpacityColor;
@@ -199,7 +200,7 @@ function DisplayPlayerStatuses(playerAmount) {
 }
 
 function UpdatePlayerStatuses() {
-    for (let i = 0; i < players.length; i++) {
+    /*for (let i = 0; i < players.length; i++) {
         try {
             document.getElementById(`player_spot_info${i + 1}`).style.display = "none";
             document.getElementById(`turn_button${i + 1}`).style.display = "none";
@@ -208,8 +209,8 @@ function UpdatePlayerStatuses() {
         }
     }
     document.getElementById(`player_spot_info${currentPlayerTurn + 1}`).style.display = "block";
-    document.getElementById(`turn_button${currentPlayerTurn + 1}`).style.display = "block";
-    document.getElementById(`player_spot_info${currentPlayerTurn + 1}`).innerHTML = `Current Spot: ${boardgameSpots.indexOf(players[currentPlayerTurn].pawn.currentSpot) + 1} -> ${players[currentPlayerTurn].pawn.currentSpot.type}`
+    document.getElementById(`turn_button${currentPlayerTurn + 1}`).style.display = "block";*/
+    document.getElementById(`player_spot_info${currentPlayerTurn + 1}`).innerHTML = `Location ${boardgameSpots.indexOf(players[currentPlayerTurn].pawn.currentSpot) + 1}: ${players[currentPlayerTurn].pawn.currentSpot.type}`
 }
 
 export function ToggleModal() {
@@ -254,7 +255,7 @@ function DisplayPlayerCountInputModal() {
 
     $('#modal-body').append('<input type="range" id="player_amount_input" value="5" min="5" max="8" onchange="SetPlayerAmount(this.value)">');
     $('#modal-body').append('<h2 id="player_amount_text"></h2>');
-    $('#modal-body').append('<button id="next_button" onclick="DisplayNicknameInputModal();">Next</button>');
+    $('#modal-body').append('<button class="up" id="next_button" onclick="DisplayNicknameInputModal();">Next</button>');
 
     SetPlayerAmount(playerAmount);
 }
@@ -266,12 +267,15 @@ function DisplayCard() {
     switch (players[currentPlayerTurn].pawn.currentSpot.type) {
         case 'reflection':
             cards = reflectionCards;
+            ChangeModalColor('yellow');
             break;
         case 'information':
             cards = informationCards;
+            ChangeModalColor('blue');
             break;
         case 'question':
             cards = questionCards;
+            ChangeModalColor('orange');
             break;
         default:
             break;
@@ -282,43 +286,95 @@ function DisplayCard() {
     ToggleModal();
 }
 
-function DisplaySpot() {
-    var functions = 'EndTurn();';
+export function DisplaySpot() {
+    var functions = '';
+    ChangeModalColor('white');
 
     switch (players[currentPlayerTurn].pawn.currentSpot.type) {
         case 'reflection':
             DisplayCard();
+            functions += 'EndTurn();'
             break;
         case 'information':
             DisplayCard();
+            functions += 'EndTurn();'
             break;
         case 'question':
             DisplayCard();
+            functions += 'EndTurn();'
             break;
         case 'vr':
             DisplayVR();
+            functions += 'EndTurn();'
+            ChangeModalColor('greenblue');
         case 'dice':
             DisplaySpotModal("Wow!", "You have landed on a 'dice' spot, you get another turn!");
-            functions = '';
+            ChangeModalColor('greenblue');
             break;
         case 'back':
             DisplaySpotModal("Oh no!", "You have landed on a 'go back' spot, you went two spaces back!");
-            functions += 'MovePlayerBack();'
+            functions += 'MovePlayerBack(2);'
+            functions += 'EndTurn();'
+            ChangeModalColor('greenblue');
             break;
         case 'minigame':
             DisplaySpotModal("Temporary!", "This is where the minigame link will come!");
+            ChangeModalColor('greenblue');
+            functions += 'EndTurn();'
             break;
         case 'interactive story':
-            DisplaySpotModal("Interactive Story!", `Click the following link to navigate to the interactive story minigame! <button onclick="OpenInteractiveStory();">Click Here!</button>`);
+            DisplaySpotModal("Interactive Story!", `Click the following link to navigate to the interactive story minigame! <button class="up" onclick="OpenInteractiveStory();">Click Here!</button>`);
+            ChangeModalColor('greenblue');
+            functions += 'EndTurn();'
             break;
         case 'finish':
             DisplaySpotModal("Congratulations!", "You have reached the finish!");
+            functions += 'EndTurn();'
             break;
         default:
             break;
     }
 
-    document.querySelector("#modal-footer").innerHTML = `<button onclick="${functions}">Done</button>`
+    document.querySelector("#modal-footer").innerHTML = `<button class="up" onclick="${functions}">Done</button>`
+}
+
+function MovePlayerBack(amount){
+    var newLocation = boardgameSpots.indexOf(players[currentPlayerTurn].pawn.currentSpot) - amount;
+    console.log(newLocation, boardgameSpots[newLocation])
+
+    players[currentPlayerTurn].pawn.Move(boardgameSpots[newLocation]);
+    DrawBoardgame();
+    UpdatePlayerStatuses();
+}
+
+function ChangeModalColor(color){
+    var hexColor;
+    switch (color) {
+        case 'yellow':
+            hexColor = '#fbb919'
+            break;
+        case 'greenblue':
+            hexColor = '#69c2c0'
+            break;
+        case 'blue':
+            hexColor = '#8fabda'
+            break;
+        case 'orange':
+            hexColor = '#e9570d';
+            break;
+        case 'white':
+            hexColor = '#ffffff'
+            break;
+        default:
+            hexColor = '#ffffff'
+            break;
+    }
+
+    document.querySelector("#modal-title").style.backgroundColor = hexColor
+    document.querySelector("#modal-content").style.backgroundColor = hexColor
+    document.querySelector("#modal-body").style.backgroundColor = hexColor
+    document.querySelector("#modal-footer").style.backgroundColor = hexColor
+
 }
 
 export function OpenInteractiveStory(){
@@ -408,7 +464,7 @@ export function DisplayNicknameInputModal() {
         $('#modal-body').append(GetNewNicknameInput(i + 1));
     }
 
-    $('#modal-body').append('<button id="doneButton" onclick="AddPlayers(); ToggleModal(); DrawBoardgame(); DisplayPlayerStatuses(GetPlayerAmount());">Done</button>');
+    $('#modal-body').append('<button class="up" id="doneButton" onclick="AddPlayers(); ToggleModal(); DrawBoardgame(); DisplayPlayerStatuses(GetPlayerAmount());">Done</button>');
 }
 
 export function SetPlayerAmount(playerAmountIn) {
