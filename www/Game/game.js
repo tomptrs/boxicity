@@ -1,6 +1,6 @@
-import { cards as stayHereCards } from "./services/stayhereService.js"
-import { cards as reflectionCards } from "./services/reflectionService.js"
-import { cards as informationCards } from "./services/informationService.js"
+import { cardsFR as questionCards } from "./services/questionService.js"
+import { cardsFR as reflectionCards } from "./services/reflectionService.js"
+import { cardsFR as informationCards } from "./services/informationService.js"
 import { spots as boardgameSpots } from "./services/boargameSpotService.js"
 
 import { Player } from "./classes/Player.js";
@@ -270,13 +270,17 @@ function DisplayCard() {
         case 'information':
             cards = informationCards;
             break;
-        case 'stay here':
-            cards = stayHereCards;
+        case 'question':
+            cards = questionCards;
             break;
         default:
             break;
     }
 
+    var randomQuestion = cards[Math.round(Math.random() * (cards.length - 1))].question;
+    var randomAnswer = cards[Math.round(Math.random() * (cards.length - 1))].answer;
+
+    console.log(randomQuestion, randomAnswer)
     document.querySelector("#modal-title").innerHTML = cards[Math.round(Math.random() * (cards.length - 1))].question
     document.querySelector("#modal-body").innerHTML = cards[Math.round(Math.random() * (cards.length - 1))].answer
     ToggleModal();
@@ -285,8 +289,12 @@ function DisplayCard() {
 function DisplaySpot() {
     switch (players[currentPlayerTurn].pawn.currentSpot.type) {
         case 'reflection':
+            DisplayCard();
+            break;
         case 'information':
-        case 'stay here':
+            DisplayCard();
+            break;
+        case 'question':
             DisplayCard();
             break;
         case 'vr':

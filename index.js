@@ -13,4 +13,4 @@ app.get('/ar', (req,res)=> {
   res.sendFile('index.html');
 })
 
-app.listen(process.env.PORT || 3000, () => console.log('server ready'))
+app.listen(process.env.PORT || 3001, () => console.log('server ready'))
