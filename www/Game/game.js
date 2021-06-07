@@ -302,7 +302,7 @@ function DisplaySpot() {
 
 function DisplayVR() {
     document.querySelector("#modal-title").innerHTML = "Scan the code with your smartphone"
-    document.querySelector("#modal-body").innerHTML = "<img src='images/ScanVRBoxicity.png' width='300' height='300'>"
+    document.querySelector("#modal-body").innerHTML = "<img src='images/ScanVR.png' width='300' height='300'>"
     ToggleModal();
 }
 
