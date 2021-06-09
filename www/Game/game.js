@@ -2,6 +2,7 @@ import { cardsFR as questionCards } from "./services/questionService.js"
 import { cardsFR as reflectionCards } from "./services/reflectionService.js"
 import { cardsFR as informationCards } from "./services/informationService.js"
 import { spots as boardgameSpots } from "./services/boargameSpotService.js"
+import * as strings from "./services/stringService.js"
 
 import { Player } from "./classes/Player.js";
 import { Pawn } from "./classes/Pawn.js";
@@ -134,6 +135,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
     window.MovePlayerBack = MovePlayerBack;
     window.DisplaySpot = DisplaySpot;
 
+    document.getElementById('spin_button').innerHTML = strings.spinButton;
+    document.getElementById('wheel-modal-title').innerHTML = strings.wheelModalTitle;
+
     //TODO ask for playercount and nicknames
     ToggleModal();
 
@@ -187,11 +191,11 @@ function DisplayPlayerStatuses(playerAmount) {
     for (var i = 0; i < playerAmount; i++) {
         $('.status_container').append(GetNewStatusDiv(status_height, i + 1));
         $('#player_status' + (i + 1)).append(`<p class="player_nickname">${players[i].nickname}</p>`)
-        $('#player_status' + (i + 1)).append(`<p class="player_spot_info" id="player_spot_info${i + 1}">Location ${boardgameSpots.indexOf(players[i].pawn.currentSpot) + 1}: ${players[i].pawn.currentSpot.type}</p>`)
+        $('#player_status' + (i + 1)).append(`<p class="player_spot_info" id="player_spot_info${i + 1}">${strings.playerStatusInfo} ${boardgameSpots.indexOf(players[i].pawn.currentSpot) + 1}: ${players[i].pawn.currentSpot.displayText}</p>`)
         if (i == currentPlayerTurn)
-            $('#player_status' + (i + 1)).append(`<div class="turn_button_container"><button class="turn_button up" id="turn_button${i + 1}" onclick="StartTurn();">Start Turn</button></div>`)
+            $('#player_status' + (i + 1)).append(`<div class="turn_button_container"><button class="turn_button up" id="turn_button${i + 1}" onclick="StartTurn();">${strings.startTurnButton}</button></div>`)
         else
-            $('#player_status' + (i + 1)).append(`<div class="turn_button_container"><button class="turn_button up" id="turn_button${i + 1}" disabled onclick="StartTurn();">Start Turn</button></div>`)
+            $('#player_status' + (i + 1)).append(`<div class="turn_button_container"><button class="turn_button up" id="turn_button${i + 1}" disabled onclick="StartTurn();">${strings.startTurnButton}</button></div>`)
 
         var halfOpacityColor = `#${players[i].pawn.color.substring(1)}80`;
         document.getElementById(`player_status${i + 1}`).style.backgroundColor = halfOpacityColor;
@@ -210,7 +214,7 @@ function UpdatePlayerStatuses() {
     }
     document.getElementById(`player_spot_info${currentPlayerTurn + 1}`).style.display = "block";
     document.getElementById(`turn_button${currentPlayerTurn + 1}`).style.display = "block";*/
-    document.getElementById(`player_spot_info${currentPlayerTurn + 1}`).innerHTML = `Location ${boardgameSpots.indexOf(players[currentPlayerTurn].pawn.currentSpot) + 1}: ${players[currentPlayerTurn].pawn.currentSpot.type}`
+    document.getElementById(`player_spot_info${currentPlayerTurn + 1}`).innerHTML = `${strings.playerStatusInfo} ${boardgameSpots.indexOf(players[currentPlayerTurn].pawn.currentSpot) + 1}: ${players[currentPlayerTurn].pawn.currentSpot.displayText}`
 }
 
 export function ToggleModal() {
@@ -247,15 +251,15 @@ function GetRandomFirstName() {
 
 //TODO remove random value of input before launching
 function GetNewNicknameInput(playerIndex) {
-    return `<label class="nickname_input_label" id="nickname_input_label${playerIndex}" for="nickname${playerIndex}">Nickname Player ${playerIndex}</label><br><input class="nickname_input" id="nickname_input${playerIndex}" type="text" value="${GetRandomFirstName()}" name="nickname${playerIndex}" value=""><br>`
+    return `<label class="nickname_input_label" id="nickname_input_label${playerIndex}" for="nickname${playerIndex}">${strings.nicknameInputLabel} ${playerIndex}</label><br><input class="nickname_input" id="nickname_input${playerIndex}" type="text" value="${GetRandomFirstName()}" name="nickname${playerIndex}" value=""><br>`
 }
 
 function DisplayPlayerCountInputModal() {
-    document.querySelector("#modal-title").innerHTML = `Please Enter The Player Count`;
+    document.querySelector("#modal-title").innerHTML = strings.playerCountTitle;
 
     $('#modal-body').append('<input type="range" id="player_amount_input" value="5" min="5" max="8" onchange="SetPlayerAmount(this.value)">');
     $('#modal-body').append('<h2 id="player_amount_text"></h2>');
-    $('#modal-body').append('<button class="up" id="next_button" onclick="DisplayNicknameInputModal();">Next</button>');
+    $('#modal-body').append(`<button class="up" id="next_button" onclick="DisplayNicknameInputModal();">${strings.nextButton}</button>`);
 
     SetPlayerAmount(playerAmount);
 }
@@ -335,7 +339,7 @@ export function DisplaySpot() {
             break;
     }
 
-    document.querySelector("#modal-footer").innerHTML = `<button class="up" onclick="${functions}">Done</button>`
+    document.querySelector("#modal-footer").innerHTML = `<button class="up" onclick="${functions}">${strings.doneButton}</button>`
 }
 
 function MovePlayerBack(amount){
@@ -457,14 +461,14 @@ function ToggleWheelModal() {
 }
 
 export function DisplayNicknameInputModal() {
-    document.querySelector("#modal-title").innerHTML = `Please Enter Your Nicknames`;
+    document.querySelector("#modal-title").innerHTML = strings.nicknameInputTitle;
     document.querySelector('#modal-body').innerHTML = '';
 
     for (var i = 0; i < playerAmount; i++) {
         $('#modal-body').append(GetNewNicknameInput(i + 1));
     }
 
-    $('#modal-body').append('<button class="up" id="doneButton" onclick="AddPlayers(); ToggleModal(); DrawBoardgame(); DisplayPlayerStatuses(GetPlayerAmount());">Done</button>');
+    $('#modal-body').append(`<button class="up" id="doneButton" onclick="AddPlayers(); ToggleModal(); DrawBoardgame(); DisplayPlayerStatuses(GetPlayerAmount());">${strings.doneButton}</button>`);
 }
 
 export function SetPlayerAmount(playerAmountIn) {
