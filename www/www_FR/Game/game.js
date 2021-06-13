@@ -1,6 +1,10 @@
 import { cardsFR as questionCards } from "./services/questionService.js"
 import { cardsFR as reflectionCards } from "./services/reflectionService.js"
 import { cardsFR as informationCards } from "./services/informationService.js"
+import { cardsFR as linkConceptCards } from "./services/linkConceptsService.js"
+import { cardsFR as guessMovementCards } from "./services/guessMovementService.js"
+import { cardsFR as whoiswhoCards } from "./services/whoiswhoService.js"
+
 import { spots as boardgameSpots } from "./services/boargameSpotService.js"
 import * as strings from "./services/stringService.js"
 
@@ -9,12 +13,14 @@ import { Pawn } from "./classes/Pawn.js";
 import { Vector2 } from "./classes/Vector2.js";
 
 import { Color } from "./services/colorService.js"
+import { QuestionCard, QuestionRevealCard, RevealCard } from "./classes/card.js"
+
 
 
 $(window).resize(function () {
     $(`.boardgame_container`).height(window.innerHeight);
     for (let i = 0; i < players.length; i++) {
-        $(`#player_status${i+1}`).height(window.innerHeight/players.length - 25);
+        $(`#player_status${i + 1}`).height(window.innerHeight / players.length - 25);
     }
 });
 
@@ -114,6 +120,9 @@ var playerAmount = 5;
 var players = []
 var currentPlayerTurn = 0;
 
+var currentCardNr;
+var currentCardSet;
+
 /* Once DOM is loaded, start the boardgame */
 document.addEventListener("DOMContentLoaded", (event) => {
     //const Color = new Color();
@@ -134,8 +143,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
     window.OpenInteractiveStory = OpenInteractiveStory;
     window.MovePlayerBack = MovePlayerBack;
     window.DisplaySpot = DisplaySpot;
+    window.RevealCardAnswer = RevealCardAnswer;
 
-    document.getElementById('spin_button').innerHTML = strings.spinButton;
+    //document.getElementById('spin_button').innerHTML = strings.spinButton;
     document.getElementById('wheel-modal-title').innerHTML = strings.wheelModalTitle;
 
     //TODO ask for playercount and nicknames
@@ -284,10 +294,90 @@ function DisplayCard() {
         default:
             break;
     }
+
     let nr = Math.round(Math.random() * (cards.length - 1))
+
+    currentCardNr = nr;
+    currentCardSet = cards;
+
+    var alphabet = ['a', 'b', 'c', 'd', 'e']
+
+    if (cards[nr] instanceof QuestionCard) {
+        var qc = cards[nr]
+
+        var html =
+            `<div id="question-div" style="display: flex; flex-wrap: wrap; width: 100%; height: 100%; align-items: center;">
+            <p style="width: 100%;">${qc.answer}</p>
+        </div>`
+
+        document.querySelector("#modal-body").innerHTML = html
+
+        for (let i = 0; i < qc.choices.length; i++) {
+            const c = qc.choices[i];
+            document.querySelector("#question-div").innerHTML += (`<button class="choice-button" value="${alphabet[i]}" style="margin: 1em; width: ${90 / qc.choices.length}%;" onclick="RevealCardAnswer(this, this.value)">${alphabet[i]}: ${c}</button>`)
+        }
+
+        document.querySelector("#question-div").innerHTML += (`<div style="width: 100%; text-align: center; margin: 1em;"><p id="revealP"></p></div>`)
+    }
+
+    else if (cards[nr] instanceof RevealCard) {
+        var rc = cards[nr]
+
+        var html =
+            `<div id="question-div" style="display: flex; flex-wrap: wrap; width: 100%; height: 100%; align-items: center;">
+            <p style="width: 100%;">${rc.answer}</p>
+            <button style="margin: 1em; width: 90%;" onclick="RevealCardAnswer()">Reveal Answer</button>
+            <div style="width: 100%; text-align: center; margin: 1em;"><p id="revealP"></p></div>
+        </div>`
+
+        document.querySelector("#modal-body").innerHTML = html
+    }
+
+    else {
+        document.querySelector("#modal-body").innerHTML = cards[nr].answer
+    }
+
     document.querySelector("#modal-title").innerHTML = cards[nr].question
-    document.querySelector("#modal-body").innerHTML = cards[nr].answer
+
     ToggleModal();
+}
+
+export function RevealCardAnswer(button, input) {
+    if (currentCardSet[currentCardNr] instanceof QuestionCard) {
+        if (input == currentCardSet[currentCardNr].correctChoice) {
+            button.style.backgroundColor = '#b1ffa8'
+            document.getElementById('revealP').append(strings.rightAnswer)
+        } else {
+            button.style.backgroundColor = '#eb6060'
+            document.getElementById('revealP').append(strings.wrongAnser)
+        }
+
+        var btns = document.getElementsByClassName('choice-button')
+        for (let i = 0; i < btns.length; i++) {
+            const btn = btns[i];
+            btn.disabled = true;
+        }
+    }
+
+    else if (currentCardSet[currentCardNr] instanceof RevealCard) {
+        document.getElementById('revealP').append(`${currentCardSet[currentCardNr].revealText}`)
+    }
+
+    else if (currentCardSet[currentCardNr] instanceof QuestionRevealCard){
+        if (input == currentCardSet[currentCardNr].correctChoice) {
+            button.style.backgroundColor = '#b1ffa8'
+            document.getElementById('revealP').innerHTML = `${strings.rightAnswer}<br>${currentCardSet[currentCardNr].revealText}`
+        } else {
+            button.style.backgroundColor = '#eb6060'
+            document.getElementById('revealP').innerHTML = `${strings.wrongAnser}<br>${currentCardSet[currentCardNr].revealText}`
+        }
+
+        var btns = document.getElementsByClassName('choice-button')
+        for (let i = 0; i < btns.length; i++) {
+            const btn = btns[i];
+            btn.disabled = true;
+        }
+    }
 }
 
 export function DisplaySpot() {
@@ -322,7 +412,7 @@ export function DisplaySpot() {
             ChangeModalColor('greenblue');
             break;
         case 'minigame':
-            DisplaySpotModal("Temporary!", "This is where the minigame link will come!");
+            DisplayMinigameCard();
             ChangeModalColor('greenblue');
             functions += 'EndTurn();'
             break;
@@ -342,7 +432,74 @@ export function DisplaySpot() {
     document.querySelector("#modal-footer").innerHTML = `<button class="up" onclick="${functions}">${strings.doneButton}</button>`
 }
 
-function MovePlayerBack(amount){
+function DisplayMinigameCard() {
+    var nr = Math.round(Math.random() * 3);
+    var cards;
+
+    switch (nr) {
+        case 1:
+            cards = whoiswhoCards;
+            break;
+        case 2:
+            cards = linkConceptCards;
+            break;
+        case 3:
+            cards = guessMovementCards;
+            break;
+        default:
+            break;
+    }
+
+    currentCardSet = cards;
+    nr = Math.round(Math.random() * (cards.length - 1));
+    currentCardNr = nr;
+
+    var alphabet = ['a', 'b', 'c', 'd', 'e']
+
+    if (cards[nr] instanceof QuestionCard) {
+        var qc = cards[nr]
+
+        var html =
+            `<div id="question-div" style="display: flex; flex-wrap: wrap; width: 100%; height: 100%; align-items: center; justify-content: center;">
+            <p style="width: 100%;">${qc.answer}</p>
+        </div>`
+
+        document.querySelector("#modal-body").innerHTML = html
+
+        for (let i = 0; i < qc.choices.length; i++) {
+            const c = qc.choices[i];
+            document.querySelector("#question-div").innerHTML += (`<button class="choice-button" value="${alphabet[i]}" style="margin: 1em; width: ${90 / qc.choices.length}%;" onclick="RevealCardAnswer(this, this.value)">${alphabet[i]}: ${c}</button>`)
+        }
+
+        document.querySelector("#question-div").innerHTML += (`<div style="width: 100%; text-align: center; margin: 1em;"><p id="revealP"></p></div>`)
+    }
+
+    if (cards[nr] instanceof QuestionRevealCard) {
+        var qc = cards[nr]
+
+        var html =
+            `<div id="question-div" style="display: flex; flex-wrap: wrap; width: 100%; height: 100%; align-items: center;">
+            <p style="width: 100%;">${qc.answer}</p>
+        </div>`
+
+        document.querySelector("#modal-body").innerHTML = html
+
+        for (let i = 0; i < qc.choices.length; i++) {
+            const c = qc.choices[i];
+            document.querySelector("#question-div").innerHTML += (`<button class="choice-button" value="${alphabet[i]}" style="margin: 1em; width: ${75 / qc.choices.length}%;" onclick="RevealCardAnswer(this, this.value)">${alphabet[i]}: ${c}</button>`)
+        }
+
+        document.querySelector("#question-div").innerHTML += (`<div style="width: 100%; text-align: center; margin: 1em;"><p id="revealP"></p></div>`)
+    }
+
+
+    document.querySelector("#modal-title").innerHTML = cards[nr].question
+
+    ToggleModal();
+
+}
+
+function MovePlayerBack(amount) {
     var newLocation = boardgameSpots.indexOf(players[currentPlayerTurn].pawn.currentSpot) - amount;
     console.log(newLocation, boardgameSpots[newLocation])
 
@@ -351,7 +508,7 @@ function MovePlayerBack(amount){
     UpdatePlayerStatuses();
 }
 
-function ChangeModalColor(color){
+function ChangeModalColor(color) {
     var hexColor;
     switch (color) {
         case 'yellow':
@@ -381,11 +538,11 @@ function ChangeModalColor(color){
 
 }
 
-export function OpenInteractiveStory(){
+export function OpenInteractiveStory() {
     window.open(`localhost:3001/InteractiveStory/index.html`)
 }
 
-function DisplaySpotModal(title, body){
+function DisplaySpotModal(title, body) {
     document.querySelector("#modal-title").innerHTML = title
     document.querySelector("#modal-body").innerHTML = body
     ToggleModal();
@@ -408,6 +565,7 @@ function DisplayAR() {
 
 export function StartTurn() {
     ToggleWheelModal();
+    startSpin();
 }
 
 export function EndTurn() {
@@ -418,7 +576,7 @@ export function EndTurn() {
             playersFinished++;
     });
 
-    if(playersFinished == players.length)
+    if (playersFinished == players.length)
         EndGame();
 
 
@@ -428,7 +586,7 @@ export function EndTurn() {
         currentPlayerTurn++;
         while (players[currentPlayerTurn].pawn.reachedFinish) {
             document.getElementById(`turn_button${currentPlayerTurn + 1}`).disabled = true;
-            document.getElementById(`turn_button${currentPlayerTurn + 2}`).disabled = false;    
+            document.getElementById(`turn_button${currentPlayerTurn + 2}`).disabled = false;
             currentPlayerTurn++;
         }
     }
@@ -440,7 +598,7 @@ export function EndTurn() {
             currentPlayerTurn++;
             while (players[currentPlayerTurn].pawn.reachedFinish) {
                 document.getElementById(`turn_button${currentPlayerTurn + 1}`).disabled = true;
-                document.getElementById(`turn_button${currentPlayerTurn + 2}`).disabled = false;                
+                document.getElementById(`turn_button${currentPlayerTurn + 2}`).disabled = false;
                 currentPlayerTurn++;
             }
         }
@@ -451,7 +609,7 @@ export function EndTurn() {
     ToggleModal();
 }
 
-function EndGame(){
+function EndGame() {
     alert(`Amazing! Everyone has reached the finish! The game will now close.`);
     window.location.href = 'http://localhost:3001/index.html'
 }
