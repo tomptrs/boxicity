@@ -201,6 +201,13 @@ h4{
     justify-content: left;
 }
 
+
+.PlanLogo {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+}
+
 #pics{
     margin-top: 70px;
     text-align: center;

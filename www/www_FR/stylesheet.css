@@ -289,6 +289,12 @@ h4{
 
 }
 
+.PlanLogo {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+}
+
 /*dropdown style begin*/
 .dropdown {
     float: left;
