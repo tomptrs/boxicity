@@ -19,6 +19,7 @@ export const wheelModalTitle = 'Draai aan het rad om te bewegen!'
 export const spinButton = 'Draai'
 export const rightAnswer = 'Juist antwoord!'
 export const wrongAnser = 'Fout antwoord!'
+
 export const VRTitle = 'Scan de code met je smartphone!'
 export const DiceBody = 'Je bent op een dobbelsteen vakje geland, je krijgt nog een beurt!'
 export const BackBody = 'Je bent geland op een "ga terug" vakje, je word naar 2 vakjes terug gestuurd!'
