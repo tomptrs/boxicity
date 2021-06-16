@@ -1,4 +1,4 @@
-import {QuestionCard, RevealCard, Card} from '../classes/card.js'
+import {QuestionCard, RevealCard, Card} from '../classes/Card.js'
 
 export const cardsNL =  []
 

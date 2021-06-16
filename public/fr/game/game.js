@@ -13,7 +13,7 @@ import { Pawn } from "./classes/Pawn.js";
 import { Vector2 } from "./classes/Vector2.js";
 
 import { Color } from "./services/colorService.js"
-import { QuestionCard, QuestionRevealCard, RevealCard } from "./classes/card.js"
+import { QuestionCard, QuestionRevealCard, RevealCard } from "./classes/Card.js"
 
 
 
