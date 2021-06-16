@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boxicity</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+  <script type="text/javascript" src="./classes/Whinwheel.js"></script>
+  <script src="https://github.com/ireade/Toast.js/blob/master/dist/js/Toast.min.js"></script>
+  <script src="./classes/Toast.min.js"></script>
+  <script src="game.js" type="module"></script>
+
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./classes/Toast.min.css">
+  <link rel="stylesheet" href="./main.css">
+</head>
+
+<body>
+
+  <!--<button type="button" data-toggle="modal" data-target="#modal">Open Modal</button>-->
+  <!-- Modal -->
+  <div id="modal" class="modal fade" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content" id="modal-content">
+        <div class="modal-header" id="modal-header">
+          <h4 class="modal-title" id="modal-title">Modal Header</h4>
+        </div>
+        <div class="modal-body" id="modal-body">
+
+        </div>
+        <div class="modal-footer" id="modal-footer">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!--<button type="button" data-toggle="modal" data-target="#modal">Open Modal</button>-->
+  <!-- Modal -->
+  <div id="wheelModal" class="modal fade" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content" id="wheel-modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="wheel-modal-title"></h4>
+        </div>
+        <div class="modal-body" id="wheel-modal-body" style="text-align: center; align-items: center; margin: 0 auto;">
+          <div align="center" style="align-self: center; margin: 0 auto;">
+            <table cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td width="438" height="582" class="the_wheel" align="center" valign="center">
+                  <canvas id="wheelCanvas" width="434" height="434">
+                    <p style="color: white;" align="center">Sorry, your browser doesn't support canvas. Please try
+                      another.</p>
+                  </canvas>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <script>
+        </script>
+        <div class="modal-footer" id="wheel-modal-footer">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+<!-- Boardgame canvas -->
+<div class="boardgame_container">
+  <canvas id="canvas" width="1400" height="880"></canvas>
+  <!--<img class="boardgame_image" src="./board.png" alt="boardgame">-->
+  <div class="status_container"></div>
+</div>
+
+
+</body>
+
+</html>

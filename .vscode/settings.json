@@ -1,5 +1,0 @@
-{
-    "appService.showBuildDuringDeployPrompt": false,
-    "appService.defaultWebAppToDeploy": "/subscriptions/63aff09c-e50e-4b66-96ac-10845d907e1f/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/boxicity",
-    "appService.deploySubpath": "."
-}
