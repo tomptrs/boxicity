@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 
+const port = process.env.PORT || 3001;
+
 app.use(express.static( "www"));
 
 
@@ -24,4 +26,6 @@ app.get('/ar', (req,res)=> {
   res.sendFile('index.html');
 })
 
-app.listen(process.env.PORT || 3001, () => console.log('server ready'))
+app.listen(port, () => {
+  console.log('server ready')
+})
