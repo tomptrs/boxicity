@@ -1,5 +1,7 @@
-export const url = 'https://boxicity-website.herokuapp.com'
-export const iasURL = 'https://boxicity-website.herokuapp.com/ias'
+export var url = 'https://boxicity-website.herokuapp.com'
+url = 'http://localhost:5000'
+export var iasURL = 'https://boxicity-website.herokuapp.com/ias'
+iasURL = 'http://localhost:5000'
 
 export function CreateNewLobby(){
     $.getJSON(url + '/getnewlobby', function (lobbyData) {
@@ -7,9 +9,20 @@ export function CreateNewLobby(){
 
         const redirectURL = iasURL + '/voting.html?lobbyCode=' + lobbyData.lobbyCode;
         CreateNewQRCode(redirectURL)
+        $('.arrow').css('opacity', '1');
         DisplayLobbyCode(lobbyData.lobbyCode);
+        setInterval(function(){console.log(lobbyData.lobbyCode); UpdateParticipantsAmount(lobbyData.lobbyCode, function(participants){
+            $('#participants_amount').html('Participants: ' + participants) 
+        });}, 200);
     })
 
+}
+
+export function UpdateParticipantsAmount(lobbyCode, callback = null){
+    $.getJSON(url + '/lobbies/' + lobbyCode, function (result) {
+        console.log(result.participants);
+        callback(result.participants);
+    })
 }
 
 export function CreateNewQRCode(url){
@@ -45,10 +58,9 @@ export function GetParameterByName(name, url = window.location.href) {
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
-export function AddParticipantToLobby(lobbyCodeIn, username){
-    $.getJSON(url + '/lobbies/' + lobbyCodeIn + '/addparticipant?username=' + username, function () {
+export function AddParticipantToLobby(lobbyCodeIn){
+    $.getJSON(url + '/lobbies/' + lobbyCodeIn + '/addparticipant', function () {
     })
-    RedirectToVoting();
 }
 
 export function StartTimer(length = 10){

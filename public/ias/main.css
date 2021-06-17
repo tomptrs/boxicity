@@ -102,9 +102,20 @@
 /*
     Styling for the index page
 */
+
+body{
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+#newLobbyBtn{
+  margin-top: 3vh;
+}
+
 #qr_container{
-    margin-top: 50px;
-    height: 350px; 
+    padding-top: 3vh;   
+    margin-bottom: 6000px;
+    height: 40vh; 
     width: 30%; 
     margin: auto;
     display: flex;
@@ -154,21 +165,21 @@
 
 @keyframes arrow_right_bounce {
   0% {
-    right: 20%;
+    right: 25%;
   }
 
   100%{
-    right: 10%;
+    right: 23%;
   }
 }
 
 @keyframes arrow_left_bounce {
   0% {
-    left: 20%;
+    left: 25%;
   }
 
   100%{
-    left: 10%;
+    left: 23%;
   }
 }
 
@@ -183,21 +194,21 @@
 #arrow_left{
   left: 20%;
   transform: rotate(-90deg);
-  animation: arrow_left_bounce 1s ease-out alternate infinite;
+  animation: arrow_left_bounce 0.4s ease-out alternate infinite;
 }
 
 #arrow_right{
   right: 20%;
   transform: rotate(90deg);
-  animation: arrow_right_bounce 1s ease-out alternate infinite;
+  animation: arrow_right_bounce 0.4s ease-out alternate infinite;
 }
 
 #lobbyCode_container{
     height: 4em; 
     width: 60%; 
     margin: auto;
-    margin-top: 2em;
-    margin-bottom: 2em;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -216,6 +227,12 @@ div #lobbyCode{
     font-weight: bold;
 }
 
+div #participants_amount{
+    margin: auto;
+    color: #17181c; 
+    font-weight: bold;
+}
+
 .lobbyCode_background{
     display: flex;
     align-items: center;
@@ -227,7 +244,7 @@ div #lobbyCode{
 }
 
 /*
-    Css for player page
+    Styling for player page
 */
 #playButton{
     height: 50px;

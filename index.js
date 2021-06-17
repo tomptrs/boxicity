@@ -9,11 +9,11 @@ const port = process.env.PORT || 3001;
 
 
 app.use(express.static('public', {
-  extensions: ['html']
+    extensions: ['html']
 }))
 
 app.get('/', (req, res) => {
-  res.redirect('/nl/index')
+    res.redirect('/nl/index')
 })
 
 
@@ -93,11 +93,10 @@ app.get('/lobbies/:lobbyCode/votingallowed', function (req, res) {
 })
 
 app.get('/lobbies/:lobbyCode/addparticipant', function (req, res) {
-    if (req.query.username != null) {
-        AddParticipant(req.params.lobbyCode, req.query.username, (result) => {
-            res.send(result);
-        });
-    }
+    AddParticipant(req.params.lobbyCode, (result) => {
+        res.send(result);
+    });
+
 })
 
 app.get('/lobbies/:lobbyCode/incrementcurrentscene', function (req, res) {
@@ -164,10 +163,10 @@ async function UpdateLobbiesOnChange(callback = null) {
     const observer = lobbiesCol.onSnapshot(snapshot => {
         snapshot.forEach(doc => {
             allLobbies.forEach(lobby => {
-                if (lobby.lobbyCode == doc.data().lobbyCode){
-                    if (_.isEqual(lobby, doc.data())){
+                if (lobby.lobbyCode == doc.data().lobbyCode) {
+                    if (_.isEqual(lobby, doc.data())) {
                         //console.log(`Lobby ${lobby.lobbyCode} had no changes`);
-                    } else  {
+                    } else {
                         //console.log(`Lobby ${lobby.lobbyCode} was changed`);
                         console.log(`Lobby ${lobby.lobbyCode} was updated`);
 
@@ -196,9 +195,9 @@ async function RetrieveLobbyDataByLobbyCode(lobbyCode, callback = null) {
     });
 }
 
-function RetrieveLocalLobbyDataByLobbyCode(lobbyCode, callback = null){
+function RetrieveLocalLobbyDataByLobbyCode(lobbyCode, callback = null) {
     allLobbies.forEach(lobby => {
-        if (lobby.lobbyCode == lobbyCode){
+        if (lobby.lobbyCode == lobbyCode) {
             callback(lobby);
         }
     });
@@ -214,7 +213,8 @@ async function CreateNewLobby(callback = null) {
         videoEnded: false,
         videoPlaying: false,
         votingAllowed: false,
-        currentScene: 0
+        currentScene: 0,
+        participants: 0
     })
 
     const newLobby = await newLobbyRef.get();
@@ -234,17 +234,21 @@ function GetNewLobbyCode(length = 5) {
     return result;
 }
 
-async function AddParticipant(lobbyCode, usernameIn, callback = null) {
+async function AddParticipant(lobbyCode, callback = null) {
 
     const lobbiesRef = db.collection('Lobbies');
     const lobbyCodeQueryRes = await lobbiesRef.where('lobbyCode', '==', lobbyCode).get();
 
+    var lobbyID;
     lobbyCodeQueryRes.forEach(doc => {
-        const NewParticipant = db.collection('Lobbies').doc(doc.id).collection('participants').add({
-            username: usernameIn
-        })
-        callback('{ "result":"New user ' + usernameIn + ' added as participant"');
+        lobbyID = doc.id;
     })
+
+    const lobbyRef = db.collection('Lobbies').doc(lobbyID);
+    await lobbyRef.update({
+        participants: fs.firestore.FieldValue.increment(1)
+    })
+    callback(`participants was successfuly incremented.`)
 }
 
 async function RetrieveChoices(callback = null) {
@@ -282,7 +286,7 @@ async function VoteForChoice(lobbyCode, choice, callback = null) {
     }
 }
 
-async function IncrementCurrentScene(lobbyCode, callback = null){
+async function IncrementCurrentScene(lobbyCode, callback = null) {
     const lobbiesRef = db.collection('Lobbies');
     const lobbyCodeQueryRes = await lobbiesRef.where('lobbyCode', '==', lobbyCode).get();
 
@@ -296,10 +300,10 @@ async function IncrementCurrentScene(lobbyCode, callback = null){
         currentScene: fs.firestore.FieldValue.increment(1)
     })
     callback(`CurrentScene was successfuly incremented.`)
-    
+
 }
 
-async function ResetLobby(lobbyCode, callback = null){
+async function ResetLobby(lobbyCode, callback = null) {
     const lobbiesRef = db.collection('Lobbies');
     const lobbyCodeQueryRes = await lobbiesRef.where('lobbyCode', '==', lobbyCode).get();
 

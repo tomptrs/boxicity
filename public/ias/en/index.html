@@ -9,18 +9,18 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
-    <script type="module" src="./main.js"></script>
+    <script type="module" src="../main.js"></script>
 
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="../main.css">
 
 </head>
 
 <body>
 
 
-    <button class="up" id="newLobbyBtn" onclick="CreateNewLobby()">NIEUWE LOBBY</button>
+    <button class="up" id="newLobbyBtn" onclick="CreateNewLobby()">NEW LOBBY</button>
 
-    <h2>De QR code zal hier onder verschijnen</h1>
+    <h2>Your QR code will be displayed below</h1>
 
         <div id="qr_container">
             <div class="square1"></div>
@@ -34,9 +34,9 @@
             <div id="qrcode"></div>
         </div>
 
-        <img class="arrow" id="arrow_left" src="./assets/images/arrow_white.png" alt="">
+        <img class="arrow" id="arrow_left" src="../assets/images/arrow_white.png" alt="">
 
-        <img class="arrow" id="arrow_right" src="./assets/images/arrow_white.png" alt="">
+        <img class="arrow" id="arrow_right" src="../assets/images/arrow_white.png" alt="">
 
 
         <div id="lobbyCode_container">
@@ -45,7 +45,14 @@
             </div>
         </div>
 
-        <button class="up" onclick="RedirectToLobby(lobbyCode.innerHTML)">KLAAR</button>
+        <div id="lobbyCode_container">
+            <div class="lobbyCode_background">
+                <h1 style="color: #17181c; font-weight: bolder;" id="participants_amount"></h1>
+            </div>
+        </div>
+
+
+        <button class="up" id="done_button" onclick="RedirectToLobby(lobbyCode.innerHTML)">DONE</button>
 
 </body>
 

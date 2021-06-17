@@ -27,7 +27,9 @@ import {
     DisplayLobbyCode,
     GetParameterByName,
     AddParticipantToLobby,
-    StartTimer
+    StartTimer,
+    UpdateParticipantsAmount,
+    url
 } from "./modules/lobbyController.js";
 
 
@@ -54,3 +56,5 @@ window.DisplayLobbyCode = DisplayLobbyCode
 window.GetParameterByName = GetParameterByName
 window.AddParticipantToLobby = AddParticipantToLobby
 window.StartTimer = StartTimer
+
+window.UpdateParticipantsAmount = UpdateParticipantsAmount
