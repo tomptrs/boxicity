@@ -1,5 +1,5 @@
-export const url = 'https://boxicity.herokuapp.com'
-export const iasURL = 'https://boxicity.herokuapp.com/ias'
+export const url = 'https://boxicity-website.herokuapp.com'
+export const iasURL = 'https://boxicity-website.herokuapp.com/ias'
 
 export function CreateNewLobby(){
     $.getJSON(url + '/getnewlobby', function (lobbyData) {

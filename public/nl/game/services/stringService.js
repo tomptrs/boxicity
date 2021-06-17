@@ -28,10 +28,8 @@ export const Congratulations = 'Gefeliciteerd!'
 export const FinishBody = 'Je bent op het einde van het spel!'
 export const EndGameAlert = 'Geweldig, iedereen heeft de finish bereikt!'
 
-export var IAURL = 'http://boxicity.azurewebsites.net/www_NL/InteractiveStory'
-IAURL = 'http://localhost:3001/www_NL/InteractiveStory'
+export var IAURL = 'https://boxicity-website.herokuapp.com/ias'
 
-export var ReflectionURL = 'http://boxicity.azurewebsites.net/www_NL/final_reflection.html'
-ReflectionURL = 'http://localhost:3001/www_NL/final_reflection.html'
+export var ReflectionURL = 'https://boxicity-website.herokuapp.com/final_reflection'
 
-export var NodeServerURL = 'http://localhost:3000/' 
+export var NodeServerURL = 'https://boxicity-website.herokuapp.com/' 
