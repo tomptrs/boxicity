@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,38 +14,39 @@
     <link rel="stylesheet" href="main.css">
 
 </head>
+
 <body>
-    
+
 
     <button class="up" id="newLobbyBtn" onclick="CreateNewLobby()">NEW LOBBY</button>
-    <br>
-    <br>
+
     <h2>Your QR code will be displayed below</h1>
-    <br>
-    <br>
-    <br>
-    <br>
 
-    <div id="qr_container">
-        <div class="square1"></div>
-        <div class="empty"></div>
-        <div class="empty"></div>
-        <div class="empty"></div>
-        <div class="empty"></div>
-        <div class="square2"></div>
+        <div id="qr_container">
+            <div class="square1"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="square2"></div>
 
-        <div class="qr_background"></div>
-        <div id="qrcode"></div>
-    </div>
-
-
-    <div id="lobbyCode_container">       
-        <div class="lobbyCode_background">
-            <h1 #lobbyCode id="lobbyCode"></h1>
+            <div class="qr_background"></div>
+            <div id="qrcode"></div>
         </div>
-    </div>
-    
-    <button class="up" onclick="RedirectToLobby(lobbyCode.innerHTML)">DONE</button>
+
+        <img class="arrow" id="arrow_left" src="./assets/images/arrow_white.png" alt="">
+
+        <img class="arrow" id="arrow_right" src="./assets/images/arrow_white.png" alt="">
+
+
+        <div id="lobbyCode_container">
+            <div class="lobbyCode_background">
+                <h1 #lobbyCode id="lobbyCode"></h1>
+            </div>
+        </div>
+
+        <button class="up" onclick="RedirectToLobby(lobbyCode.innerHTML)">DONE</button>
 
 </body>
+
 </html>
