@@ -9,39 +9,45 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="module" src="../main.js"></script>
+    <script type="module" src="../modules/lobbyController.js"></script>
+    <script type="module" src="../modules/videoController.js"></script>
+    <script type="module" src="../modules/voting.js"></script>
+
 
     <link rel="stylesheet" href="../main.css">
 
 </head>
 
-<body onload="  DisplayLobbyCode(GetParameterByName('lobbyCode'));
-                ">
+<body>
 
 
+    <div id="video_container">
+        <video id='video' onended="SetVideoEnded(true); StartTimer(); TogglePlayButton(); TogglePlayButtonClass(); ToggleModal();" height="100%">
+            <source id='videoSource' src='../assets/videos/s1.mp4'>
+        </video>
 
-    <h1 id="lobbyCode"></h1>
+        <div id="progress_bar"></div>
 
-    <video id='video' onended="SetVideoEnded(true); StartTimer();" height="400" width="1600">
-        <source id='videoSource' src='../assets/videos/s1.mp4'>
-    </video>
-    <br>
-    <br>
-    <img id="playButton" onclick="ToggleVideoPlaying()" src="../assets/images/play_button.png" alt="play">
-    <br>
-    <br>
+        <button id="next_video_button" class="up" onclick="PlayNextVideo()">Next Video</button>
+        <button id="count_votes_button" class="up" onclick="CountVotes((data) => { console.log(data) });">Count
+            Votes</button>
+
+        <h1 id="choiceOneVotesAmount"></h1>
+        <h1 id="choiceTwoVotesAmount"></h1>
+
+    </div>
 
 
-    <button class="up" onclick="PlayNextVideo()">Next Video</button>
-    <button class="up" onclick="CountVotes((data) => { console.log(data) });">Count Votes</button>
+    <div id="video_container_overlay"></div>
 
-    <h1 id="choiceOneVotesAmount"></h1>
-    <h1 id="choiceTwoVotesAmount"></h1>
+    <div id="playButton"></div>
 
+    <div id="modal"></div>
 
     <!-- <button type="button" data-toggle="modal" data-target="#modal">Open Modal</button> -->
     <!-- Modal -->
 
-  
+
 </body>
 
 </html>

@@ -124,7 +124,7 @@ app.get('/choices', function (req, res) {
 })
 
 app.listen(port, () => {
-    console.log(`Firestore API listening on port 3000!`)
+    console.log(`Firestore API listening on port ${port}!`)
     RetrieveAllLobbies((lobbiesData) => {
         allLobbies = lobbiesData;
         UpdateLobbiesOnChange();

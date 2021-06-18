@@ -1,31 +1,62 @@
 export var url = 'https://boxicity-website.herokuapp.com'
-//url = 'http://localhost:5000'
+url = 'http://localhost:5000'
 export var iasURL = 'https://boxicity-website.herokuapp.com/ias/en'
-//iasURL = 'http://localhost:5000'
+iasURL = 'http://localhost:5000/ias/en'
 
-export function CreateNewLobby(){
+var lastParticipantAmount = 0;
+
+export function CreateNewLobby() {
     $.getJSON(url + '/getnewlobby', function (lobbyData) {
-        console.log(lobbyData.lobbyCode);
-
         const redirectURL = iasURL + '/voting.html?lobbyCode=' + lobbyData.lobbyCode;
         CreateNewQRCode(redirectURL)
-        $('.arrow').css('opacity', '1');
         DisplayLobbyCode(lobbyData.lobbyCode);
-        setInterval(function(){console.log(lobbyData.lobbyCode); UpdateParticipantsAmount(lobbyData.lobbyCode, function(participants){
-            $('#participants_amount').html('Participants: ' + participants) 
-        });}, 200);
+        
+        $('#qrcode_title').animate({'opacity': '0'}, 200, function(){
+            $('#qrcode_title').html('Scan the QR code!')
+            $('#qrcode_title').animate({'opacity': '1'}, 200)
+        })
+
+        $('.arrow').animate({'opacity': '1'}, 200);
+        $('#qrcode').animate({
+            'opacity': '1'
+        }, 200)
+        $('#lobbyCode').animate({
+            'opacity': '1'
+        }, 200)
+        $('#participants_amount').animate({
+            'opacity': '1'
+        }, 200)  
+
+        console.log('animated')
+
+        setInterval(function () {
+            console.log(lobbyData.lobbyCode); UpdateParticipantsAmount(lobbyData.lobbyCode, function (participants) {
+                $('#participants_amount').html('Participants: ' + participants)
+                console.log('last amount', lastParticipantAmount, 'new amount', participants)
+                if (participants > lastParticipantAmount) {
+                    $('#participants_amount').animate({
+                        fontSize: '2.5em'
+                    }, 50, function(){
+                        $('#participants_amount').animate({
+                            fontSize: '2em'
+                        }, 100)
+                    })
+                    lastParticipantAmount = participants;
+                }
+            });
+        }, 200);
     })
 
 }
 
-export function UpdateParticipantsAmount(lobbyCode, callback = null){
+export function UpdateParticipantsAmount(lobbyCode, callback = null) {
     $.getJSON(url + '/lobbies/' + lobbyCode, function (result) {
         console.log(result.participants);
         callback(result.participants);
     })
 }
 
-export function CreateNewQRCode(url){
+export function CreateNewQRCode(url) {
     new QRCode(document.getElementById('qrcode'), {
         text: url,
         width: 264,
@@ -35,17 +66,17 @@ export function CreateNewQRCode(url){
     });
 }
 
-export function DisplayLobbyCode(lobbyCodeIn){
+export function DisplayLobbyCode(lobbyCodeIn) {
     document.getElementById('lobbyCode').innerHTML = lobbyCodeIn;
 }
 
-export function RedirectToLobby(lobbyCodeIn){
-    if (lobbyCodeIn != ''){
+export function RedirectToLobby(lobbyCodeIn) {
+    if (lobbyCodeIn != '') {
         window.location.href = iasURL + '/player.html?lobbyCode=' + lobbyCodeIn;
     }
 }
 
-export function RedirectToVoting(){
+export function RedirectToVoting() {
     window.location.href = iasURL + '/voting.html?lobbyCode=' + GetParameterByName('lobbyCode');
 }
 
@@ -58,11 +89,11 @@ export function GetParameterByName(name, url = window.location.href) {
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
-export function AddParticipantToLobby(lobbyCodeIn){
+export function AddParticipantToLobby(lobbyCodeIn) {
     $.getJSON(url + '/lobbies/' + lobbyCodeIn + '/addparticipant', function () {
     })
 }
 
-export function StartTimer(length = 10){
+export function StartTimer(length = 10) {
 
 }
