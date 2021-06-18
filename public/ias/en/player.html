@@ -18,23 +18,24 @@
 
 </head>
 
-<body>
+<body onload="">
 
 
     <div id="video_container">
-        <video id='video' onended="SetVideoEnded(true); StartTimer(); TogglePlayButton(); TogglePlayButtonClass(); ToggleModal();" height="100%">
+        <video id='video' #video ontimeupdate="UpdateProgressBar(video);" onended="SetVideoEnded(true); StartTimer(); TogglePlayButtonClass(); ToggleModal();" height="100%">
             <source id='videoSource' src='../assets/videos/s1.mp4'>
         </video>
 
         <div id="progress_bar"></div>
 
+        <!--
         <button id="next_video_button" class="up" onclick="PlayNextVideo()">Next Video</button>
         <button id="count_votes_button" class="up" onclick="CountVotes((data) => { console.log(data) });">Count
             Votes</button>
 
         <h1 id="choiceOneVotesAmount"></h1>
         <h1 id="choiceTwoVotesAmount"></h1>
-
+        -->
     </div>
 
 
@@ -42,7 +43,29 @@
 
     <div id="playButton"></div>
 
-    <div id="modal"></div>
+    <div id="modal">
+        <h1 id="modal_title">Please vote on your phones!</h1>
+
+        <div class="choice_container">
+            <div class="choice_graph_container">
+                <div id="choice_one_graph" class="choice_graph">
+                    <h2 id="choice_one_votes_amount" class="choice_votes_amount"></h2>
+                    <h2 id="choice_one_subtitle" class="choice_subtitle"></h2>
+                </div>
+            </div>
+        </div>
+        <div class="choice_container">
+            <div class="choice_graph_container">
+                <div id="choice_two_graph" class="choice_graph">
+                    <h2 id="choice_two_votes_amount" class="choice_votes_amount"></h2>
+                    <h2 id="choice_two_subtitle" class="choice_subtitle"></h2>
+                </div>
+            </div>
+        </div>
+
+        <button id="finish_voting_button" class="up2" onclick="PlayNextVideo(); ToggleModal(); ResetVotes();">FINISH VOTING</button>
+
+    </div>
 
     <!-- <button type="button" data-toggle="modal" data-target="#modal">Open Modal</button> -->
     <!-- Modal -->

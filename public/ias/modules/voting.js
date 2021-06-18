@@ -3,7 +3,11 @@ import { GetParameterByName, url } from './lobbyController.js'
 import { GetCurrentScene } from './videoController.js';
 
 export var choices;
-export var voted = false;
+export let voted = false;
+
+export function ChangeVoted(value){
+    voted = value;
+}
 
 export function VoteForChoice(choice) {
     $.getJSON(url + '/lobbies/' + GetParameterByName('lobbyCode') + '/vote?choice=' + choice, function (result) {
@@ -15,16 +19,12 @@ export function VoteForChoice(choice) {
 export function CountVotes(callback = null){
     $.getJSON(url + '/lobbies/' + GetParameterByName('lobbyCode'), function (lobbyData) {
         if (lobbyData.choiceOne > lobbyData.choiceTwo){
-            callback(0)
+            callback(0, lobbyData.choiceOne, lobbyData.choiceTwo)
         } else if (lobbyData.choiceOne < lobbyData.choiceTwo){
-            callback(1);
+            callback(1, lobbyData.choiceOne, lobbyData.choiceTwo);
         } else{
-            callback(-1);
+            callback(-1, lobbyData.choiceOne, lobbyData.choiceTwo);
         }
-
-        document.getElementById('choiceOneVotesAmount').innerHTML = lobbyData.choiceOne;
-        document.getElementById('choiceTwoVotesAmount').innerHTML = lobbyData.choiceTwo;
-
     })
 }
 
@@ -44,15 +44,15 @@ export function ClearVotes(){
 
 export function SetChoices(){
     /*RetrieveChoices(() => {
-        const choiceOneBtn = document.getElementById('choiceOneBtn');
-        const choiceTwobtn = document.getElementById('choiceTwoBtn');
+        var choiceOneBtn = document.getElementById('choiceOneBtn');
+        var choiceTwobtn = document.getElementById('choiceTwoBtn');
     
         choiceOneBtn.innerHTML = choices[2 * sceneNumber];
         choiceTwobtn.innerHTML = choices[(2 * sceneNumber) + 1];
     });*/
     GetCurrentScene((currentScene) =>{        
-        const choiceOneBtn = document.getElementById('choiceOneBtn');
-        const choiceTwobtn = document.getElementById('choiceTwoBtn');
+        var choiceOneBtn = document.getElementById('choiceOneBtn');
+        var choiceTwobtn = document.getElementById('choiceTwoBtn');
     
         if (choiceOneBtn.innerHTML != allChoices[currentScene].textC1){
             voted = false;
@@ -64,8 +64,8 @@ export function SetChoices(){
 }
 
 export function SetVotingButtonsDisabled(disabled){
-    const choiceOneBtn = document.getElementById('choiceOneBtn');
-    const choiceTwobtn = document.getElementById('choiceTwoBtn');
+    var choiceOneBtn = document.getElementById('choiceOneBtn');
+    var choiceTwobtn = document.getElementById('choiceTwoBtn');
 
     choiceOneBtn.disabled = disabled;
     choiceTwobtn.disabled = disabled;

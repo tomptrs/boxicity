@@ -1,12 +1,13 @@
-import { ClearVotes, CountVotes, voted, /*RetrieveChoices*/ } from './voting.js'
+import { ClearVotes, CountVotes, ChangeVoted, /*RetrieveChoices*/ } from './voting.js'
 import { url } from './lobbyController.js'
 import { allChoices } from '../services/ChoicesService.js';
+import {  TogglePlayButtonClass } from "../main.js"
 
 export var videoPlaying;
 export var videoEnded = false;
 
 export function ToggleVideoPlaying() {
-    const video = document.getElementById('video');
+    var video = document.getElementById('video');
     if (video != null) {
         if (video.paused) {
             videoPlaying = true
@@ -56,7 +57,7 @@ export function ResetAll() {
     SetVideoPlaying(false);*/
 
     $.getJSON(url + '/lobbies/' + GetParameterByName('lobbyCode') + '/reset');
-    voted = false;
+    ChangeVoted(false);
 }
 
 export function IncrementCurrentScene(callback = null) {
@@ -67,8 +68,8 @@ export function PlayNextVideo() {
 
     /*RetrieveChoices(() => {
         CountVotes((winner) => {
-            const video = document.getElementById('video'); 
-            const source = document.getElementById('videoSource');
+            var video = document.getElementById('video'); 
+            var source = document.getElementById('videoSource');
         
             source.setAttribute('src', './assets/videos/' + allChoices[currentScene].videos[winner] + '.mp4');
             currentScene++
@@ -79,24 +80,24 @@ export function PlayNextVideo() {
         });
         
     });*/
-    CountVotes((winner) => {
-        if (winner != -1){
-            GetCurrentScene((currentScene) => {
-                if (currentScene < allChoices.length){
-                    const video = document.getElementById('video');
-                    const source = document.getElementById('videoSource');
-    
-                    source.setAttribute('src', './assets/videos/' + allChoices[currentScene].videos[winner] + '.mp4');
-    
-                    IncrementCurrentScene()
-    
-                    video.load();
-                    ToggleVideoPlaying();
-                    ResetAll();
-                } else {
-                    window.location.href = url + '/';
-                }
-            });
-        }
+    CountVotes((winner, choiceOneCount, choiceTwoCount) => {
+        if (winner == -1)
+            winner = 0
+
+        GetCurrentScene((currentScene) => {
+            if (currentScene < allChoices.length) {
+                $('#video').attr('src', '../assets/videos/' + allChoices[currentScene].videos[winner] + '.mp4');
+
+                IncrementCurrentScene()
+
+                video.load();
+                ToggleVideoPlaying();
+                ResetAll();
+                TogglePlayButtonClass();
+            } else {
+                window.location.href = url + '/';
+            }
+        });
+
     });
 }

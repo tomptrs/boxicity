@@ -24,7 +24,13 @@
     box-shadow: inset 0 -3.25em 0 0 var(--hover);
     color: #17181c;
   }
-  .up:disabled{
+
+  .up2:hover, .up2:focus {
+    box-shadow: inset 0 -3.25em 0 0 var(--hover);
+    color: #17181c;
+  }
+
+  .up:disabled, .up2:disabled{
     box-shadow: none;
     color: #3f3f3f;
     border-color: #3f3f3f;
@@ -58,6 +64,10 @@
   .up {
     --color: #b9e3e2;
     --hover: #b9e3e2;
+  }
+  .up2 {
+    --color: #121212;
+    --hover: #fdd067;
   }
   .slide {
     --color: #8fc866;
@@ -367,7 +377,7 @@ div #participants_amount{
 
   display: flex;
   flex-wrap: wrap;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
 }
@@ -375,6 +385,81 @@ div #participants_amount{
 #modal.visible{
   opacity: 1;
   pointer-events: all;
+  background-color: #8fabda;
+}
+
+#modal_title{
+  font-family: 'Montserrat', sans-serif;
+  color: #17181c;
+
+  width: 100%;
+}
+
+.choice_container{
+  position: relative;
+  height: 60%;
+  width: 40%;
+
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.choice_graph_container{
+  width: 70%;
+  height: 100%;
+
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  border-bottom: solid #17181c 2px;
+}
+
+.choice_graph{
+  height: 0%;
+  width: 50%;
+  border-top-left-radius: 0.5em;
+  border-top-right-radius: 0.5em;
+  transition: all 0.2s ease-out;
+
+  margin: 0em;
+  background-color: #fdd067;
+
+  position: absolute;
+  bottom: 0;
+
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.choice_votes_amount{
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  color: #17181c;
+}
+
+.choice_subtitle{
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  color: #17181c;
+  font-size: smaller;
+  width: 100%;
+  margin-bottom: 1em;
+  opacity: 0;
+
+  transition: all 0.2s ease-out;
+}
+
+#finish_voting_button{
+
 }
 
 #next_video_button{
