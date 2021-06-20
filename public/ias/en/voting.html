@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height: 100%; overflow: hidden;">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,21 +9,60 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <script type="module" src="../main.js"></script>
-    
+    <script type="module" src="../modules/lobbyController.js"></script>
+    <script type="module" src="../modules/videoController.js"></script>
+    <script type="module" src="../modules/voting.js"></script>
+
     <link rel="stylesheet" href="../main.css">
 
 
 </head>
-<body onload="  DisplayLobbyCode(GetParameterByName('lobbyCode')); 
-                SetChoices(0);
+<body style="height: 100%; overflow: hidden; position: relative; background-color: white;" onload="  SetChoices(0);
                 SetVotingButtonsDisabled(true);
-                AddParticipantToLobby(GetParameterByName('lobbyCode'))
-                setInterval(function(){ GetCurrentScene((currentScene) => {SetChoices(currentScene)}); GetVotingAllowed((allowed) => { SetVotingButtonsDisabled(!allowed)} ); }, 1000);">
+                AddParticipantToLobby(GetParameterByName('lobbyCode'));
+                setInterval(function(){ GetCurrentScene((currentScene) => {
+                    SetChoices(currentScene)
+                }); 
+                GetVotingAllowed((allowed) => { 
+                    SetVotingButtonsDisabled(!allowed)}); 
+                }, 1000);
+                setTimeout(() =>{
+                    $('#waiting_overlay_first').remove();
+                }, 1000)
+                setInterval(() => {
+                    AnimateOverlayTitle();
+                }, 500);
+                ">
     
-    <h1 id="lobbyCode"></h1>
 
-    <button class="up" id="choiceOneBtn" onclick="VoteForChoice(1); SetVotingButtonsDisabled(true);">placeholder</button>
-    <button class="up" id="choiceTwoBtn" onclick="VoteForChoice(2); SetVotingButtonsDisabled(true);">placeholder</button>
+    <div id="voting_container">
+        <h1 id="question"></h1>
+        <div id="choice_one_button_container">
+            <h1 id="choice_one_button"></h1>
+        </div>
+        <div id="choice_two_button_container">
+            <h1 id="choice_two_button"></h1>
+        </div>
+    </div>
+
+    <div id="waiting_overlay_first"></div>
+    <div id="waiting_overlay">
+        <div id="waiting_overlay_tutorial_container">
+            <h2 id="waiting_overlay_tutorial_title">Get Ready!</h2>
+            <h1 id="waiting_overlay_tutorial">When a video ends, two choices will appear here. Click the option you want to vote for!</h1>
+            <h1 id="waiting_overlay_tutorial_two">Touch the screen to progress.</h1>
+            <div id="touch_ring"></div>
+            <div id="touch_ring_two"></div>
+            <div id="touch_pulse"></div>
+        </div>
+        <h1 id="waiting_overlay_title">Waiting for the video to end<p id="dots"></p></h1>
+    </div>
+
+
+    <!--
+        <button class="up" id="choiceOneBtn" onclick="VoteForChoice(1); SetVotingButtonsDisabled(true);">placeholder</button>
+        <button class="up" id="choiceTwoBtn" onclick="VoteForChoice(2); SetVotingButtonsDisabled(true);">placeholder</button>
+    -->
 
 </body>
 </html>

@@ -1,5 +1,7 @@
 class Choice{
-    constructor(textC1, videoNameC1, textC2, videoNameC2){
+    constructor(question, textC1, videoNameC1, textC2, videoNameC2){
+        this.question = question
+
         this.textC1 = textC1;
         this.videoNameC1 = videoNameC1;
 
@@ -18,8 +20,8 @@ allChoices.push(new Choice("Ja, dat kan wel.", "s4-c1", "Dat weet ik nog niet.",
 allChoices.push(new Choice("Dat beantwoord ik liever niet.", "s5-c1", "Ik voel me nogal oncomfortabel.", "s5-c2"))
 allChoices.push(new Choice("Daar ga ik niet mee akkoord.", "s6-c1", "Als dat hetzelfde is als een man.", "s6-c2"))*/
 
-allChoices.push(new Choice("How did you discover this company?", "s2-c1", "Looks like you prettied yourself up.", "s2-c2"))
-allChoices.push(new Choice("Are you married?", "s3-c1", "What is your added value?", "s3-c2"))
-allChoices.push(new Choice("Yes, I might.", "s4-c1", "Not really sure at this point.", "s4-c2"))
-allChoices.push(new Choice("I'd rather not answer that right now.", "s5-c1", "I feel a little uncomfortable.", "s5-c2"))
-allChoices.push(new Choice("I don't agree.", "s6-c1", "If that's the same as my male counterpart.", "s6-c2"))
+allChoices.push(new Choice("What should the interviewer ask?", "How did you discover this company?", "s2-c1", "Looks like you prettied yourself up.", "s2-c2"))
+allChoices.push(new Choice("What should the interviewer ask?", "Are you married?", "s3-c1", "What is your added value?", "s3-c2"))
+allChoices.push(new Choice("What should Ms. Chikua answer?", "Yes, I might.", "s4-c1", "Not really sure at this point.", "s4-c2"))
+allChoices.push(new Choice("What should Ms. Chikua answer?", "I'd rather not answer that right now.", "s5-c1", "I feel a little uncomfortable.", "s5-c2"))
+allChoices.push(new Choice("What should Ms. Chikua answer?", "I don't agree.", "s6-c1", "If that's the same as my male counterpart.", "s6-c2"))

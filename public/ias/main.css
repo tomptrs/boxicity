@@ -513,3 +513,211 @@ div #participants_amount{
 
 /* Styling of voting page */
 
+@keyframes HideWaitingOverlay {
+  0%{
+    transform: translateX(0%);
+  }
+
+  100%{
+    transform: translateX(100%);
+  }
+}
+
+@keyframes RevealWaitingOverlay {
+  0%{
+    transform: translateX(-100%);
+  }
+
+  100%{
+    transform: translateX(0%);
+  }
+}
+
+#waiting_overlay_first{
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+  background: #8fabda;
+}
+
+#waiting_overlay{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #8fabda;
+
+  animation: RevealWaitingOverlay 300ms ease-out forwards;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+}
+
+#waiting_overlay.hidden{
+  animation: HideWaitingOverlay 300ms ease-out forwards;
+}
+
+#waiting_overlay_title, #waiting_overlay_title_voted{
+  opacity: 0;
+  width: 70%;
+}
+
+@keyframes AppearSmoothly {
+  0%{
+    opacity: 0;
+  }
+
+  50%{
+    opacity: 0;
+  }
+
+  100%{
+    opacity: 1;
+  }
+}
+
+#waiting_overlay_tutorial_container{
+  animation: AppearSmoothly forwards 2s ease-out;
+
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  text-align: center;
+  align-items: center;
+}
+
+#waiting_overlay_tutorial_title{
+  margin-bottom: 2em;
+}
+
+#waiting_overlay_tutorial, #waiting_overlay_tutorial_two{
+  width: 70%;
+  font-size: 16pt;
+}
+
+#waiting_overlay_tutorial_two{
+  margin-top: 20vh;
+}
+
+#touch_pulse{
+  border: solid rgb(255, 255, 255) 2px;
+	border-radius: 50%;
+	height: 6em;
+	width: 6em;
+
+  position: fixed;
+  top: 80%;
+  margin-top: -3em;
+  left: 50%;
+  margin-left: -3em;
+
+
+	transform: scale(1);
+	animation: pulse 1s infinite;
+}
+
+#touch_ring, #touch_ring_two{
+  border: solid rgb(255, 255, 255) 2px;
+	border-radius: 50%;
+	height: 4em;
+	width: 4em;
+
+  position: fixed;
+  top: 80%;
+  margin-top: -2em;
+  left: 50%;
+  margin-left: -2em;
+
+
+  box-shadow: 0 0 0 0 rgb(255, 255, 255);
+	transform: scale(1);
+}
+
+#touch_ring_two{
+  height: 2em;
+	width: 2em;
+  margin-top: -1em;
+  margin-left: -1em;
+}
+
+@keyframes pulse {
+	0% {
+		transform: scale(0.80);
+    opacity: 1;
+	}
+
+	100% {
+		transform: scale(1);
+    opacity: 0;
+	}
+}
+
+#voting_container{
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+
+  overflow: hidden;
+  
+
+  background-color: #ea570dda;
+}
+
+#question{
+  margin-bottom: 3em;
+}
+
+#choice_one_button_container, #choice_two_button_container{
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  text-align: center;
+  align-items: center;
+
+  font-weight: 400;
+  font-size: 8pt;
+
+  border: solid white 2px;
+  border-radius: 0.5em;
+
+  width: 80%;
+  height: 20%;
+  margin-bottom: 2em;
+}
+
+#choice_one_button_container{
+  background-color: #8fabda;
+
+  transition: all 500ms ease-out;
+}
+
+#choice_two_button_container{
+  background-color: #8fc866;
+  transition: all 500ms ease-out;
+}
+
+#choice_one_button, #choice_two_button{
+  width: 80%;
+  height: fit-content;
+  align-self: center;
+}
+
