@@ -27,7 +27,7 @@
 
   .up2:hover, .up2:focus {
     box-shadow: inset 0 -3.25em 0 0 var(--hover);
-    color: #17181c;
+    color: #ffffff;
   }
 
   .up:disabled, .up2:disabled{
@@ -66,7 +66,7 @@
     --hover: #b9e3e2;
   }
   .up2 {
-    --color: #121212;
+    --color: #ffffff;
     --hover: #fdd067;
   }
   .slide {
@@ -390,15 +390,14 @@ div #participants_amount{
 
 #modal_title{
   font-family: 'Montserrat', sans-serif;
-  color: #17181c;
 
   width: 100%;
 }
 
 .choice_container{
   position: relative;
-  height: 60%;
-  width: 40%;
+  height: 40%;
+  width: 50%;
 
   display: flex;
   flex-wrap: wrap;
@@ -408,7 +407,7 @@ div #participants_amount{
 }
 
 .choice_graph_container{
-  width: 70%;
+  width: 50%;
   height: 100%;
 
   display: flex;
@@ -417,17 +416,16 @@ div #participants_amount{
   align-items: center;
   justify-content: center;
 
-  border-bottom: solid #17181c 2px;
+  border-bottom: solid #ffffff 2px;
 }
 
 .choice_graph{
   height: 0%;
-  width: 50%;
+  width: 30%;
   border-top-left-radius: 0.5em;
   border-top-right-radius: 0.5em;
-  transition: all 0.2s ease-out;
+  /*transition: all 0.2s ease-out;*/
 
-  margin: 0em;
   background-color: #fdd067;
 
   position: absolute;
@@ -443,23 +441,57 @@ div #participants_amount{
 .choice_votes_amount{
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
-  color: #17181c;
+
+  width: 100%;
 }
 
 .choice_subtitle{
   font-family: 'Montserrat', sans-serif;
   font-weight: 300;
-  color: #17181c;
-  font-size: smaller;
-  width: 100%;
-  margin-bottom: 1em;
+  font-size: normal;
+  width: 45%;
   opacity: 0;
+  text-align: center;
+  margin: 0.5em;
 
   transition: all 0.2s ease-out;
 }
 
-#finish_voting_button{
+@keyframes PlusOne{
+  0%{
+    opacity: 0;
+    transform: rotate(0deg);
+    transform: translate(0px, 0px) scale(0.5);
+  }
 
+  50%{
+    opacity: 1;
+  }
+
+  100%{
+    transform: rotate(30deg);
+    transform: translate(10px, -10px) scale(1);
+  }
+}
+
+.plus_anim{
+  opacity: 0;
+  position: absolute;
+  top: 30%;
+  left: 60%;
+
+  animation: 500ms PlusOne;
+}
+
+#plus_anim_one, #plus_anim_two{
+  position: absolute;
+  top: 30%;
+  left: 60%;
+
+  opacity: 0;
+}
+
+#finish_voting_button{
 }
 
 #next_video_button{
@@ -467,7 +499,17 @@ div #participants_amount{
   top: 20%;
 }
 
+#winning_choice{
+  opacity: 0;
+  font-weight: 300;
+  width: 100%;
+}
+
 #count_votes_button{
   position: absolute;
   top: 20%;
 }
+
+
+/* Styling of voting page */
+

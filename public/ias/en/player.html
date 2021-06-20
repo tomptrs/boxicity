@@ -18,11 +18,11 @@
 
 </head>
 
-<body onload="">
+<body onload="ResetVotes(() => {UpdateGraphs();});">
 
 
     <div id="video_container">
-        <video id='video' #video ontimeupdate="UpdateProgressBar(video);" onended="SetVideoEnded(true); StartTimer(); TogglePlayButtonClass(); ToggleModal();" height="100%">
+        <video id='video' #video ontimeupdate="UpdateProgressBar(video);" onended=" ResetVotes(() => {ToggleModal();}); SetVideoEnded(true); TogglePlayButtonClass(); UpdateGraphs();" height="100%">
             <source id='videoSource' src='../assets/videos/s1.mp4'>
         </video>
 
@@ -49,21 +49,25 @@
         <div class="choice_container">
             <div class="choice_graph_container">
                 <div id="choice_one_graph" class="choice_graph">
-                    <h2 id="choice_one_votes_amount" class="choice_votes_amount"></h2>
-                    <h2 id="choice_one_subtitle" class="choice_subtitle"></h2>
+                    <h2 id="choice_one_votes_amount" class="choice_votes_amount">0</h2>
+                    <h2 id="plus_anim_one">+1</h2>
                 </div>
             </div>
         </div>
         <div class="choice_container">
             <div class="choice_graph_container">
                 <div id="choice_two_graph" class="choice_graph">
-                    <h2 id="choice_two_votes_amount" class="choice_votes_amount"></h2>
-                    <h2 id="choice_two_subtitle" class="choice_subtitle"></h2>
+                    <h2 id="choice_two_votes_amount" class="choice_votes_amount">0</h2>
+                    <h2 id="plus_anim_two">+1</h2>
                 </div>
             </div>
         </div>
+        <h2 id="choice_one_subtitle" class="choice_subtitle"></h2>
+        <h2 id="choice_two_subtitle" class="choice_subtitle"></h2>
 
-        <button id="finish_voting_button" class="up2" onclick="PlayNextVideo(); ToggleModal(); ResetVotes();">FINISH VOTING</button>
+        <h2 id="winning_choice">placeholder</h2>
+
+        <button id="finish_voting_button" class="up2" onclick="PlayNextVideo(); ToggleModal();">FINISH VOTING</button>
 
     </div>
 

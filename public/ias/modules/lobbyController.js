@@ -1,5 +1,7 @@
 export var url = 'https://boxicity-website.herokuapp.com'
+url = 'http://localhost:5000'
 export var iasURL = 'https://boxicity-website.herokuapp.com/ias/en'
+iasURL = 'http://localhost:5000/ias/en'
 
 var lastParticipantAmount = 0;
 
