@@ -153,6 +153,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     //everything starts after this modal has been completed
     DisplayPlayerCountInputModal();
+
+    $('.player_nickname').bigtext();
 })
 
 
@@ -202,10 +204,14 @@ function DisplayPlayerStatuses(playerAmount) {
         $('.status_container').append(GetNewStatusDiv(status_height, i + 1));
         $('#player_status' + (i + 1)).append(`<p class="player_nickname">${players[i].nickname}</p>`)
         $('#player_status' + (i + 1)).append(`<p class="player_spot_info" id="player_spot_info${i + 1}">${strings.playerStatusInfo} ${boardgameSpots.indexOf(players[i].pawn.currentSpot) + 1}: ${players[i].pawn.currentSpot.displayText}</p>`)
-        if (i == currentPlayerTurn)
+        if (i == currentPlayerTurn){
             $('#player_status' + (i + 1)).append(`<div class="turn_button_container"><button class="turn_button up" id="turn_button${i + 1}" onclick="StartTurn();">${strings.startTurnButton}</button></div>`)
-        else
+            $('#player_status' + (i + 1)).css('border', 'solid 2px ' + players[currentPlayerTurn].pawn.color)
+        }
+        else{
             $('#player_status' + (i + 1)).append(`<div class="turn_button_container"><button class="turn_button up" id="turn_button${i + 1}" disabled onclick="StartTurn();">${strings.startTurnButton}</button></div>`)
+            $('#player_status' + (i + 1)).css('border', 'none')
+        }
 
         var halfOpacityColor = `#${players[i].pawn.color.substring(1)}80`;
         document.getElementById(`player_status${i + 1}`).style.backgroundColor = halfOpacityColor;
@@ -225,6 +231,15 @@ function UpdatePlayerStatuses() {
     document.getElementById(`player_spot_info${currentPlayerTurn + 1}`).style.display = "block";
     document.getElementById(`turn_button${currentPlayerTurn + 1}`).style.display = "block";*/
     document.getElementById(`player_spot_info${currentPlayerTurn + 1}`).innerHTML = `${strings.playerStatusInfo} ${boardgameSpots.indexOf(players[currentPlayerTurn].pawn.currentSpot) + 1}: ${players[currentPlayerTurn].pawn.currentSpot.displayText}`
+    for (var i = 0; i < playerAmount; i++) {
+        if (i == currentPlayerTurn){
+            $('#player_status' + (i + 1)).css('border', 'solid 2px ' + players[currentPlayerTurn].pawn.color)
+        }
+        else{
+            $('#player_status' + (i + 1)).css('border', 'none')
+        }
+    }
+
 }
 
 export function ToggleModal() {
