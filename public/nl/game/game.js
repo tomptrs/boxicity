@@ -282,7 +282,7 @@ function GetNewNicknameInput(playerIndex) {
 function DisplayPlayerCountInputModal() {
     document.querySelector("#modal-title").innerHTML = strings.playerCountTitle;
 
-    $('#modal-body').append('<input type="range" id="player_amount_input" value="5" min="5" max="8" onchange="SetPlayerAmount(this.value)">');
+    $('#modal-body').append('<input type="range" id="player_amount_input" value="2" min="2" max="8" onchange="SetPlayerAmount(this.value)">');
     $('#modal-body').append('<h2 id="player_amount_text"></h2>');
     $('#modal-body').append(`<button class="up" id="next_button" onclick="DisplayNicknameInputModal();">${strings.nextButton}</button>`);
 
