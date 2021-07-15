@@ -1,10 +1,13 @@
-export const url = 'http://127.0.0.1:3000'
+export const url = 'http://localhost:3000'
+export var websiteURL = 'http://boxicity.azurewebsites.net'
+websiteURL = 'http://localhost:3001/www_NL/InteractiveStory'
+
 
 export function CreateNewLobby(){
     $.getJSON(url + '/getnewlobby', function (lobbyData) {
         console.log(lobbyData.lobbyCode);
 
-        const redirectURL = 'http://127.0.0.1:5500/voting.html?lobbyCode=' + lobbyData.lobbyCode;
+        const redirectURL = websiteURL + '/voting.html?lobbyCode=' + lobbyData.lobbyCode;
         CreateNewQRCode(redirectURL)
         DisplayLobbyCode(lobbyData.lobbyCode);
     })
@@ -27,12 +30,12 @@ export function DisplayLobbyCode(lobbyCodeIn){
 
 export function RedirectToLobby(lobbyCodeIn){
     if (lobbyCodeIn != ''){
-        window.location.href = 'http://127.0.0.1:5500/player.html?lobbyCode=' + lobbyCodeIn;
+        window.location.href = websiteURL + '/player.html?lobbyCode=' + lobbyCodeIn;
     }
 }
 
 export function RedirectToVoting(){
-    window.location.href = 'http://127.0.0.1:5500/voting.html?lobbyCode=' + GetParameterByName('lobbyCode');
+    window.location.href = websiteURL + '/voting.html?lobbyCode=' + GetParameterByName('lobbyCode');
 }
 
 export function GetParameterByName(name, url = window.location.href) {

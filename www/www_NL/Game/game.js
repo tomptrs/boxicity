@@ -363,7 +363,7 @@ export function RevealCardAnswer(button, input) {
         document.getElementById('revealP').append(`${currentCardSet[currentCardNr].revealText}`)
     }
 
-    else if (currentCardSet[currentCardNr] instanceof QuestionRevealCard){
+    else if (currentCardSet[currentCardNr] instanceof QuestionRevealCard) {
         if (input == currentCardSet[currentCardNr].correctChoice) {
             button.style.backgroundColor = '#b1ffa8'
             document.getElementById('revealP').innerHTML = `${strings.rightAnswer}<br>${currentCardSet[currentCardNr].revealText}`
@@ -384,6 +384,7 @@ export function DisplaySpot() {
     var functions = '';
     ChangeModalColor('white');
 
+    console.log(players[currentPlayerTurn].pawn.currentSpot.type)
     switch (players[currentPlayerTurn].pawn.currentSpot.type) {
         case 'reflection':
             DisplayCard();
@@ -401,12 +402,14 @@ export function DisplaySpot() {
             DisplayVR();
             functions += 'EndTurn();'
             ChangeModalColor('greenblue');
+            break;
         case 'dice':
-            DisplaySpotModal("Wow!", "You have landed on a 'dice' spot, you get another turn!");
+            DisplaySpotModal("Wow!", strings.DiceBody);
             ChangeModalColor('greenblue');
+            functions += 'ToggleModal();'
             break;
         case 'back':
-            DisplaySpotModal("Oh no!", "You have landed on a 'go back' spot, you went two spaces back!");
+            DisplaySpotModal("Oh no!", strings.BackBody);
             functions += 'MovePlayerBack(2);'
             functions += 'EndTurn();'
             ChangeModalColor('greenblue');
@@ -417,15 +420,18 @@ export function DisplaySpot() {
             functions += 'EndTurn();'
             break;
         case 'interactive story':
-            DisplaySpotModal("Interactive Story!", `Click the following link to navigate to the interactive story minigame! <button class="up" onclick="OpenInteractiveStory();">Click Here!</button>`);
+            DisplaySpotModal("Interactive Story!", `${strings.IABody} <button class="up" onclick="OpenInteractiveStory();">Click Here!</button>`);
             ChangeModalColor('greenblue');
             functions += 'EndTurn();'
             break;
         case 'finish':
-            DisplaySpotModal("Congratulations!", "You have reached the finish!");
+            DisplaySpotModal(strings.Congratulations, strings.FinishBody);
             functions += 'EndTurn();'
             break;
         default:
+            DisplayVR();
+            functions += 'EndTurn();'
+            ChangeModalColor('greenblue');
             break;
     }
 
@@ -433,26 +439,32 @@ export function DisplaySpot() {
 }
 
 function DisplayMinigameCard() {
+    console.log(linkConceptCards)
+
     var nr = Math.round(Math.random() * 3);
     var cards;
+    if (nr == 0)
+        nr = 1
 
     switch (nr) {
         case 1:
             cards = whoiswhoCards;
             break;
         case 2:
-            cards = linkConceptCards;
+            cards = guessMovementCards;
             break;
         case 3:
             cards = guessMovementCards;
             break;
         default:
+            cards = linkConceptCards;
             break;
     }
 
     currentCardSet = cards;
     nr = Math.round(Math.random() * (cards.length - 1));
     currentCardNr = nr;
+    console.log(currentCardNr, currentCardSet, currentCardSet[currentCardNr])
 
     var alphabet = ['a', 'b', 'c', 'd', 'e']
 
@@ -539,7 +551,7 @@ function ChangeModalColor(color) {
 }
 
 export function OpenInteractiveStory() {
-    window.open(`localhost:3001/InteractiveStory/index.html`)
+    window.open(strings.IAURL)
 }
 
 function DisplaySpotModal(title, body) {
@@ -549,15 +561,14 @@ function DisplaySpotModal(title, body) {
 }
 
 function DisplayVR() {
-    document.querySelector("#modal-title").innerHTML = "Scan the code with your smartphone"
-    document.querySelector("#modal-body").innerHTML = "<img src='images/ScanVRBoxicity.png' width='300' height='300'>"
+    document.querySelector("#modal-title").innerHTML = strings.VRTitle;
+    document.querySelector("#modal-body").innerHTML = "<img src='./images/scanVRBoxicity.png' width='300' height='300'>"
     ToggleModal();
 }
 
 function DisplayAR() {
-
     document.querySelector("#modal-title").innerHTML = "Scan the code with your smartphone"
-    document.querySelector("#modal-body").innerHTML = "<img src='images/scanAR.png' width='300' height='300'>"
+    document.querySelector("#modal-body").innerHTML = "<img src='./images/scanAR.png' width='300' height='300'>"
     ToggleModal();
 }
 
@@ -610,8 +621,8 @@ export function EndTurn() {
 }
 
 function EndGame() {
-    alert(`Amazing! Everyone has reached the finish! The game will now close.`);
-    window.location.href = 'http://localhost:3001/index.html'
+    alert(strings.EndGameAlert);
+    window.location.href = strings.ReflectionURL;
 }
 
 function ToggleWheelModal() {
