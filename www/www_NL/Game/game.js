@@ -116,7 +116,7 @@ export function alertPrize(indicatedSegment) {
 }
 
 
-var playerAmount = 5;
+var playerAmount = 2;
 var players = []
 var currentPlayerTurn = 0;
 
